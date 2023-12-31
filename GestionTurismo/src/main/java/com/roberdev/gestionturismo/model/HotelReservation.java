@@ -3,6 +3,7 @@ package com.roberdev.gestionturismo.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.roberdev.gestionturismo.model.enums.RoomType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +25,7 @@ public class HotelReservation {
     private Integer nights;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private Room.RoomType roomType;
+    private RoomType roomType;
     private Double totalPrice;
 
     @ManyToMany(cascade = CascadeType.ALL)

@@ -2,6 +2,7 @@ package com.roberdev.gestionturismo.dto;
 
 import com.roberdev.gestionturismo.model.Person;
 import com.roberdev.gestionturismo.model.Room;
+import com.roberdev.gestionturismo.model.enums.RoomType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class HotelReservationDTO {
     private Integer nights;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private Room.RoomType roomType;
+    private RoomType roomType;
     private Double totalPrice;
     private List<PersonDTO> guests = new ArrayList<>();
 

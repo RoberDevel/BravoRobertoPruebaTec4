@@ -2,6 +2,7 @@ package com.roberdev.gestionturismo.dto;
 
 import com.roberdev.gestionturismo.model.Person;
 import com.roberdev.gestionturismo.model.Room;
+import com.roberdev.gestionturismo.model.enums.RoomType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,6 @@ public class CreateReservationDTO {
     private String hotelCode;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private Room.RoomType roomType;
+    private RoomType roomType;
     private List<PersonDTO> guests;
 }

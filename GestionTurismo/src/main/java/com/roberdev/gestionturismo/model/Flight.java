@@ -1,12 +1,12 @@
 package com.roberdev.gestionturismo.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.roberdev.gestionturismo.model.enums.FlightSeatType;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,12 +18,19 @@ public class Flight {
     @Id
     private Long id;
     private String flightNumber;
-    private String name;
+
     private String origin;
     private String destination;
-    private String seatType;
-    private Double flightPrice;
+
+    @Enumerated(EnumType.STRING)
+    private FlightSeatType seatType;
+
+    private Double seatPrice;
+
+    private Boolean isFull;
+
     private LocalDate date;
+
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private List<FlightReservation> flightReservations = new ArrayList<>();
