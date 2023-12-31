@@ -23,13 +23,13 @@ public class HotelController {
     private IHotelService hotelService;
 
     @PostMapping("/hotels/new")
-    public ResponseEntity<HotelDTO> createHotel(@RequestBody CreateHotelDTO hotel) {
+    public ResponseEntity<?> createHotel(@RequestBody CreateHotelDTO hotel) {
 
         HotelDTO hotelResult = hotelService.createHotel(hotel);
 
         if (hotelResult == null) {
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al crear el hotel");
         }
 
         return ResponseEntity.ok(hotelResult);
@@ -37,26 +37,34 @@ public class HotelController {
 
     //borrado lógico con posibilidad de reactivación
     @PostMapping("/hotels/delete/{hotelCode}")
-    public ResponseEntity<HotelDTO> changeActiveStatus(@PathVariable String hotelCode, @RequestParam boolean isActive) {
+    public ResponseEntity<?> changeActiveStatus(@PathVariable String hotelCode, @RequestParam boolean isActive) {
 
         HotelDTO hotel = hotelService.changeActiveStatus(hotelCode, isActive);
 
         if (hotel == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al cambiar el estado del hotel");
         }
         return ResponseEntity.ok(hotel);
     }
 
     @GetMapping("/hotels")
-    public ResponseEntity<List<HotelDTO>> getHotels(
+    public ResponseEntity<?> getHotels(
             @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate availableFrom,
             @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate availableTo) {
 
         if (availableFrom != null && availableTo != null) {
             // Lógica para obtener hoteles en un rango de fechas y destino específico
+
+            if (hotelService.getHotelsByDate(availableFrom, availableTo).isEmpty()) {
+                return ResponseEntity.ok().body("No hay hoteles disponibles en las fechas seleccionadas");
+            }
+
             return ResponseEntity.ok(hotelService.getHotelsByDate(availableFrom, availableTo));
         } else {
             // Lógica para obtener todos los hoteles
+            if (hotelService.getAllHotels().isEmpty()) {
+                return ResponseEntity.ok().body("No hay hoteles disponibles");
+            }
             return ResponseEntity.ok(hotelService.getAllHotels());
         }
     }

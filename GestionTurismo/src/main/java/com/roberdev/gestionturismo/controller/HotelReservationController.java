@@ -1,9 +1,6 @@
 package com.roberdev.gestionturismo.controller;
 
-import com.roberdev.gestionturismo.dto.CreateReservationDTO;
-import com.roberdev.gestionturismo.dto.HotelReservationDTO;
-import com.roberdev.gestionturismo.model.HotelReservation;
-import com.roberdev.gestionturismo.repository.HotelReservationRepository;
+import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
 import com.roberdev.gestionturismo.service.IHotelReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +17,9 @@ public class HotelReservationController {
     IHotelReservationService hotelReservationService;
 
     @PostMapping("/hotel-booking/new")
-    public ResponseEntity<Double> createHotelReservation(@RequestBody CreateReservationDTO createReservationDTO) {
+    public ResponseEntity<Double> createHotelReservation(@RequestBody CreateHotelReservationDTO createHotelReservationDTO) {
 
-        Double totalPrice = hotelReservationService.createHotelReservation(createReservationDTO);
+        Double totalPrice = hotelReservationService.createHotelReservation(createHotelReservationDTO);
 
         if (totalPrice == null) {
             return ResponseEntity.badRequest().body(null);

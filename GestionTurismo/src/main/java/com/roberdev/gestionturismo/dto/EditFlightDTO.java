@@ -10,11 +10,12 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateFlightDTO {
+public class EditFlightDTO {
 
     private String origin;
     private String destination;
     private FlightSeatType seatType;
     private LocalDate date;
     private Integer totalSeats;
+
 }

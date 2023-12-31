@@ -1,18 +1,16 @@
 package com.roberdev.gestionturismo.converter;
 
-import com.roberdev.gestionturismo.dto.CreateReservationDTO;
+import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
 import com.roberdev.gestionturismo.dto.HotelReservationDTO;
 import com.roberdev.gestionturismo.dto.PersonDTO;
 import com.roberdev.gestionturismo.model.Hotel;
 import com.roberdev.gestionturismo.model.HotelReservation;
-import com.roberdev.gestionturismo.model.Person;
 import com.roberdev.gestionturismo.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class HotelReservationConverter implements Converter<HotelReservation, HotelReservationDTO> {
@@ -63,18 +61,18 @@ public class HotelReservationConverter implements Converter<HotelReservation, Ho
         return hotelReservation;
     }
 
-    public HotelReservation convertCreateReservationDTOToHotelReservation(CreateReservationDTO createReservationDTO) {
+    public HotelReservation convertCreateReservationDTOToHotelReservation(CreateHotelReservationDTO createHotelReservationDTO) {
 
-        if (createReservationDTO == null) {
+        if (createHotelReservationDTO == null) {
             return null;
         }
         HotelReservation hotelReservation = new HotelReservation();
-        hotelReservation.setHotelCode(createReservationDTO.getHotelCode());
-        hotelReservation.setCheckInDate(createReservationDTO.getCheckInDate());
-        hotelReservation.setCheckOutDate(createReservationDTO.getCheckOutDate());
-        hotelReservation.setRoomType(createReservationDTO.getRoomType());
-        hotelReservation.setGuests(createReservationDTO.getGuests().stream().map(personConverter::convertToEntity).toList());
-        
+        hotelReservation.setHotelCode(createHotelReservationDTO.getHotelCode());
+        hotelReservation.setCheckInDate(createHotelReservationDTO.getCheckInDate());
+        hotelReservation.setCheckOutDate(createHotelReservationDTO.getCheckOutDate());
+        hotelReservation.setRoomType(createHotelReservationDTO.getRoomType());
+        hotelReservation.setGuests(createHotelReservationDTO.getGuests().stream().map(personConverter::convertToEntity).toList());
+
         return hotelReservation;
     }
 

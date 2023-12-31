@@ -1,5 +1,6 @@
 package com.roberdev.gestionturismo.converter;
 
+import com.roberdev.gestionturismo.dto.CreateHotelDTO;
 import com.roberdev.gestionturismo.dto.HotelDTO;
 import com.roberdev.gestionturismo.model.Hotel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,13 @@ public class HotelConverter implements Converter<Hotel, HotelDTO> {
         }
 
         return hotel;
+    }
+
+    public HotelDTO convertCreateHotelDTOToHotelDTO(CreateHotelDTO createHotelDTO) {
+        HotelDTO hotelDTO = new HotelDTO();
+        hotelDTO.setName(createHotelDTO.getName());
+        hotelDTO.setCity(createHotelDTO.getCity());
+        return hotelDTO;
     }
 
 

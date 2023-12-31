@@ -1,7 +1,5 @@
 package com.roberdev.gestionturismo.dto;
 
-import com.roberdev.gestionturismo.model.Person;
-import com.roberdev.gestionturismo.model.Room;
 import com.roberdev.gestionturismo.model.enums.RoomType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateReservationDTO {
+public class CreateHotelReservationDTO {
 
     private String hotelCode;
     private LocalDate checkInDate;

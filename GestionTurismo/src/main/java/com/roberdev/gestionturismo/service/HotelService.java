@@ -31,14 +31,14 @@ public class HotelService implements IHotelService {
         if (hotelRepository.findByNameAndCity(createHotelDTO.getName(), createHotelDTO.getCity()) != null) {
             return null;
         }
-        HotelDTO hotelDTO = new HotelDTO();
-        hotelDTO.setName(createHotelDTO.getName());
-        hotelDTO.setCity(createHotelDTO.getCity());
+
+
+        HotelDTO hotelDTO = hotelConverter.convertCreateHotelDTOToHotelDTO(createHotelDTO);
         Hotel hotel = hotelConverter.convertToEntity(hotelDTO);
         hotel.setHotelCode(codHotelGenerator(hotel.getName()));
         hotel.setIsActive(true);
         hotel.getStatusChangeDates().add(LocalDate.now());
-       
+
         hotelRepository.save(hotel);
         hotelDTO = hotelConverter.convertToDTO(hotel);
 

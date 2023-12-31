@@ -30,7 +30,6 @@ public class RoomService implements IRoomService {
 
         if (createRoomDTO.getAvailableFrom().isAfter(createRoomDTO.getAvailableTo())) {
             return null;
-            //ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         Hotel hotel = hotelRepository.findByHotelCode(HotelCode);

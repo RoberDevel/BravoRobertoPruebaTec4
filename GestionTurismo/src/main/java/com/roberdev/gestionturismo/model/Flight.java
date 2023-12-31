@@ -19,8 +19,8 @@ public class Flight {
     private Long id;
     private String flightNumber;
 
-    private String origin;
-    private String destination;
+    private String origin = "";
+    private String destination = "";
 
     @Enumerated(EnumType.STRING)
     private FlightSeatType seatType;
@@ -31,6 +31,7 @@ public class Flight {
 
     private LocalDate date;
 
+    private Integer totalSeats;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private List<FlightReservation> flightReservations = new ArrayList<>();

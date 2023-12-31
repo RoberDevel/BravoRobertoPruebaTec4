@@ -21,7 +21,10 @@ public class FlightReservation {
     private String flightToCode;
     private String flightBackCode;
 
-    private Integer peopleQ;
+    private LocalDate dateFlightTo;
+    private LocalDate dateFlightBack;
+
+    private Integer passengersNumber;
 
     private FlightSeatType seatTypeFlightTo;
     private FlightSeatType seatTypeFlightBack;

@@ -1,8 +1,7 @@
 package com.roberdev.gestionturismo.service;
 
 import com.roberdev.gestionturismo.converter.HotelReservationConverter;
-import com.roberdev.gestionturismo.dto.CreateReservationDTO;
-import com.roberdev.gestionturismo.dto.HotelReservationDTO;
+import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
 import com.roberdev.gestionturismo.model.Hotel;
 import com.roberdev.gestionturismo.model.HotelReservation;
 import com.roberdev.gestionturismo.model.Person;
@@ -10,14 +9,12 @@ import com.roberdev.gestionturismo.model.Room;
 import com.roberdev.gestionturismo.repository.HotelRepository;
 import com.roberdev.gestionturismo.repository.HotelReservationRepository;
 import com.roberdev.gestionturismo.repository.PersonRepository;
-import com.roberdev.gestionturismo.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -33,13 +30,13 @@ public class HotelReservationService implements IHotelReservationService {
     HotelReservationConverter hotelReservationConverter;
 
     @Override
-    public Double createHotelReservation(CreateReservationDTO createReservationDTO) {
+    public Double createHotelReservation(CreateHotelReservationDTO createHotelReservationDTO) {
 
-        if (createReservationDTO.getCheckInDate().isAfter(createReservationDTO.getCheckOutDate()) ||
-                createReservationDTO.getCheckInDate().isBefore(LocalDate.now()) || createReservationDTO.getCheckInDate().equals(createReservationDTO.getCheckOutDate())) {
+        if (createHotelReservationDTO.getCheckInDate().isAfter(createHotelReservationDTO.getCheckOutDate()) ||
+                createHotelReservationDTO.getCheckInDate().isBefore(LocalDate.now()) || createHotelReservationDTO.getCheckInDate().equals(createHotelReservationDTO.getCheckOutDate())) {
             return null;
         }
-        Hotel hotel = hotelRepository.findByHotelCode(createReservationDTO.getHotelCode());
+        Hotel hotel = hotelRepository.findByHotelCode(createHotelReservationDTO.getHotelCode());
         if (hotel == null) {
             return null;
         }
@@ -48,11 +45,11 @@ public class HotelReservationService implements IHotelReservationService {
             return null;
         }
 
-        if (createReservationDTO.getGuests().isEmpty()) {
+        if (createHotelReservationDTO.getGuests().isEmpty()) {
             return null;
         }
 
-        HotelReservation hotelReservation = hotelReservationConverter.convertCreateReservationDTOToHotelReservation(createReservationDTO);
+        HotelReservation hotelReservation = hotelReservationConverter.convertCreateReservationDTOToHotelReservation(createHotelReservationDTO);
 
         // Buscar habitación disponible, realizar reserva y obtener precio total
         Double totalPrice = checkAvailability(hotel, hotelReservation);
@@ -108,7 +105,7 @@ public class HotelReservationService implements IHotelReservationService {
 
     private List<Person> createGuests(HotelReservation hotelReservation) {
         List<Person> guests = new ArrayList<>();
-        
+
         hotelReservation.getGuests().forEach(person -> {
             Person guest = new Person();
             guest.setName(person.getName());
