@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -14,8 +15,9 @@ public class EditFlightDTO {
 
     private String origin;
     private String destination;
-    private FlightSeatType seatType;
+    private Map<FlightSeatType, Double> seatTypePrices;
     private LocalDate date;
     private Integer totalSeats;
+    private Boolean isActive;
 
 }

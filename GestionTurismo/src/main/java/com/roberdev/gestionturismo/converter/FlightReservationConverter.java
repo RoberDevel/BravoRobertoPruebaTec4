@@ -1,5 +1,6 @@
 package com.roberdev.gestionturismo.converter;
 
+import com.roberdev.gestionturismo.dto.CreateFlightReservationDTO;
 import com.roberdev.gestionturismo.dto.FlightReservationDTO;
 import com.roberdev.gestionturismo.dto.PersonDTO;
 import com.roberdev.gestionturismo.model.Flight;
@@ -64,4 +65,26 @@ public class FlightReservationConverter implements Converter<FlightReservation, 
 
         return null;
     }
+
+    public FlightReservation convertCreateReservationDTOToFlightReservation(CreateFlightReservationDTO createFlightReservationDTO) {
+
+        if (createFlightReservationDTO == null) {
+            return null;
+        }
+
+        FlightReservation flightReservation = new FlightReservation();
+        flightReservation.setFlightToCode(createFlightReservationDTO.getFlightToCode());
+        flightReservation.setFlightBackCode(createFlightReservationDTO.getFlightBackCode());
+        flightReservation.setDateFlightTo(createFlightReservationDTO.getDateFlightTo());
+        flightReservation.setDateFlightBack(createFlightReservationDTO.getDateFlightBack());
+        flightReservation.setSeatTypeFlightTo(createFlightReservationDTO.getSeatTypeFlightTo());
+        flightReservation.setSeatTypeFlightBack(createFlightReservationDTO.getSeatTypeFlightBack());
+        if (createFlightReservationDTO.getPassengers() != null) {
+            flightReservation.setPassengers(createFlightReservationDTO.getPassengers().stream().map(personConverter::convertToEntity).toList());
+        }
+
+        return flightReservation;
+    }
+
+
 }

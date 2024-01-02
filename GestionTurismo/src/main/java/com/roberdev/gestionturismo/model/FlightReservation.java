@@ -17,15 +17,11 @@ public class FlightReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
     private String flightToCode;
     private String flightBackCode;
-
     private LocalDate dateFlightTo;
     private LocalDate dateFlightBack;
-
     private Integer passengersNumber;
-
     private FlightSeatType seatTypeFlightTo;
     private FlightSeatType seatTypeFlightBack;
 
@@ -38,12 +34,11 @@ public class FlightReservation {
     private List<Person> passengers = new ArrayList<>();
 
 
-    @ManyToOne
-    @JoinColumn(name = "flight_to_id")
-    private Flight flightTo;
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "flight_reservation_id"),
+            inverseJoinColumns = @JoinColumn(name = "flight_id"))
+    private List<Flight> flights = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "flight_back_id")
-    private Flight flightBack;
 
 }

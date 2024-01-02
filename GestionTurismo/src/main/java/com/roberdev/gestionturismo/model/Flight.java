@@ -22,18 +22,21 @@ public class Flight {
     private String origin = "";
     private String destination = "";
 
-    @Enumerated(EnumType.STRING)
-    private FlightSeatType seatType;
-
-    private Double seatPrice;
+    @ElementCollection
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "seat_type")
+    @Column(name = "price")
+    @CollectionTable(name = "seat_type_prices", joinColumns = @JoinColumn(name = "flight_id"))
+    private Map<FlightSeatType, Double> seatTypePrices = new EnumMap<>(FlightSeatType.class);
 
     private Boolean isFull;
-
     private LocalDate date;
-
     private Integer totalSeats;
+    private Boolean isActive;
+    private List<LocalDate> statusChangeDates = new ArrayList<>();
 
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
+
+    @ManyToMany(mappedBy = "flights", cascade = CascadeType.ALL)
     private List<FlightReservation> flightReservations = new ArrayList<>();
 }
 
