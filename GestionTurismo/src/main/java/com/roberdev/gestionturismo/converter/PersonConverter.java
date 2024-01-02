@@ -36,8 +36,6 @@ public class PersonConverter implements Converter<Person, PersonDTO> {
         person.setEmail(personDTO.getEmail());
         person.setPhone(personDTO.getPhone());
 
-        //TODO: AÑADIR LA LISTA DE FLIGHTRESERVATION, CREO
-
         return person;
     }
 }

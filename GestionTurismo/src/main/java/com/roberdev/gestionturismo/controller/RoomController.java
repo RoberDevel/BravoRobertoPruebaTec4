@@ -33,7 +33,6 @@ public class RoomController {
 
     @GetMapping("/rooms")
     public ResponseEntity<List<RoomDTO>> obtenerHabitaciones() {
-        System.out.printf(roomService.getAllRooms().toString() + "\n");
         return ResponseEntity.ok(roomService.getAllRooms());
     }
 

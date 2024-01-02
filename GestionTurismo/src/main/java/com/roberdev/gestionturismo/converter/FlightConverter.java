@@ -29,7 +29,7 @@ public class FlightConverter implements Converter<Flight, FlightDTO> {
 
         FlightDTO flightDTO = new FlightDTO();
         flightDTO.setFlightNumber(flight.getFlightNumber());
-      
+
         flightDTO.setOrigin(flight.getOrigin());
         flightDTO.setDestination(flight.getDestination());
         flightDTO.setIsFull(flight.getIsFull());
@@ -42,10 +42,14 @@ public class FlightConverter implements Converter<Flight, FlightDTO> {
         }
 
         if (flight.getFlightReservations() != null) {
-            List<FlightReservationDTO> reservationDTOs = flight.getFlightReservations().stream()
+
+            flightDTO.setFlightReservations(flight.getFlightReservations().stream()
+                    .map(flightReservationConverter::convertToDTO).toList());
+
+          /*  List<FlightReservationDTO> reservationDTOs = flight.getFlightReservations().stream()
                     .map(flightReservation -> flightReservationConverter.convertToDTO(flightReservation))
                     .collect(Collectors.toList());
-            flightDTO.setFlightReservations(reservationDTOs);
+            flightDTO.setFlightReservations(reservationDTOs);*/
         }
 
         return flightDTO;

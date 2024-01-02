@@ -2,6 +2,7 @@ package com.roberdev.gestionturismo.controller;
 
 import com.roberdev.gestionturismo.dto.CreateFlightReservationDTO;
 import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
+import com.roberdev.gestionturismo.service.IFlightReservationService;
 import com.roberdev.gestionturismo.service.IFlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class FlightReservationController {
 
     @Autowired
-    IFlightService flightService;
+    IFlightReservationService flightReservationService;
 
     @PostMapping("/flight-booking/new")
     public ResponseEntity<?> createFlightReservation(@RequestBody CreateFlightReservationDTO createFlightReservationDTO) {
 
-        Double price = flightService.createFlightReservation(createFlightReservationDTO);
+        Double price = flightReservationService.createFlightReservation(createFlightReservationDTO);
 
 
         if (price == null) {

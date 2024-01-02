@@ -30,33 +30,7 @@ public class FlightController {
         return ResponseEntity.ok().body(flightDTO);
     }
 
-    /* @GetMapping("/flights")
-     public ResponseEntity<?> getAllFlights() {
 
-         List<FlightDTO> flightsDTO = flightService.getAllFlights();
-
-         if (flightsDTO.isEmpty()) {
-             return ResponseEntity.noContent().build();
-         }
-
-         return ResponseEntity.ok().body(flightsDTO);
-     }
-
-
-     @GetMapping("/flights")
-     public ResponseEntity<?> getFlightsByDateAndOriginAndDestination(@RequestParam String date1,
-                                                                      @RequestParam String date2,
-                                                                      @RequestParam String origin,
-                                                                      @RequestParam String destination) {
-
-         List<FlightDTO> flightsDTO = flightService.getFlightsByDateAndOriginAndDestination(date1, date2, origin, destination);
-
-         if (flightsDTO.isEmpty()) {
-             return ResponseEntity.noContent().build();
-         }
-
-         return ResponseEntity.ok().body(flightsDTO);
-     }*/
     @GetMapping("/flights")
     public ResponseEntity<?> getFlights(@RequestParam(required = false) LocalDate date1,
                                         @RequestParam(required = false) LocalDate date2,

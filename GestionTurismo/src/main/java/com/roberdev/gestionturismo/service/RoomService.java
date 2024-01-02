@@ -3,8 +3,6 @@ package com.roberdev.gestionturismo.service;
 import com.roberdev.gestionturismo.converter.RoomConverter;
 import com.roberdev.gestionturismo.dto.*;
 import com.roberdev.gestionturismo.model.Hotel;
-import com.roberdev.gestionturismo.model.HotelReservation;
-import com.roberdev.gestionturismo.model.Person;
 import com.roberdev.gestionturismo.model.Room;
 import com.roberdev.gestionturismo.repository.HotelRepository;
 import com.roberdev.gestionturismo.repository.RoomRepository;

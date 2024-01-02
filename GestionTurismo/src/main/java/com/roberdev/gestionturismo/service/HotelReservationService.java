@@ -84,7 +84,6 @@ public class HotelReservationService implements IHotelReservationService {
 
             Double totalPrice = totalDays * room.getPricePerNight();
 
-            // Crear huéspedes y actualizar reserva
             List<Person> guests = createGuests(hotelReservation);
             hotelReservation.setGuests(guests);
             hotelReservation.setGuestsNumber(guests.size());
@@ -95,7 +94,7 @@ public class HotelReservationService implements IHotelReservationService {
             hotelReservation.setRoomType(room.getRoomType());
             hotelReservation.setHotelCode(hotel.getHotelCode());
             hotelReservation.setRoom(room);
-            // Guardar reserva
+
             hotelReservationRepository.save(hotelReservation);
 
             return totalPrice;

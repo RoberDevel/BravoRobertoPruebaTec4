@@ -1,6 +1,5 @@
 package com.roberdev.gestionturismo.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +27,7 @@ public class Person {
 
 
     @ManyToMany(mappedBy = "guests", cascade = CascadeType.ALL)
-    private List<HotelReservation> reservations = new ArrayList<>();
+    private List<HotelReservation> roomReservations = new ArrayList<>();
 
 
 }

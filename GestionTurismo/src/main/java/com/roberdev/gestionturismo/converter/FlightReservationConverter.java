@@ -40,7 +40,7 @@ public class FlightReservationConverter implements Converter<FlightReservation, 
         flightReservationDTO.setTotalPrice(flightReservation.getTotalPrice());
         flightReservationDTO.setPassengers(personDTOList);
 
-        return null;
+        return flightReservationDTO;
     }
 
     @Override

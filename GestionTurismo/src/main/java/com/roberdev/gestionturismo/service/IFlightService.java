@@ -27,6 +27,6 @@ public interface IFlightService {
     FlightDTO changeActiveStatus(String flightNumber, boolean isActive);
 
 
-    Double createFlightReservation(CreateFlightReservationDTO createFlightReservationDTO);
+    // Double createFlightReservation(CreateFlightReservationDTO createFlightReservationDTO);
 
 }
