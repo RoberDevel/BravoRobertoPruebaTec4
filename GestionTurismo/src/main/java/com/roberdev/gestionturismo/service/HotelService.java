@@ -106,6 +106,13 @@ public class HotelService implements IHotelService {
         if (hotel == null) {
             return null;
         }
+
+
+        if (!hotel.getRooms().stream().noneMatch(room -> !room.getHotelReservations().isEmpty())) {
+            return null;
+        }
+
+
         if (isActive != hotel.getIsActive() && LocalDate.now().isAfter(hotel.getStatusChangeDates().get(hotel.getStatusChangeDates().size() - 1))) {
             hotel.setIsActive(isActive);
             hotel.getStatusChangeDates().add(LocalDate.now());

@@ -26,7 +26,7 @@ public class Flight {
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "seat_type")
     @Column(name = "price")
-    @CollectionTable(name = "seat_type_prices", joinColumns = @JoinColumn(name = "flight_id"))
+    @CollectionTable(name = "seat_prices", joinColumns = @JoinColumn(name = "flight_id"))
     private Map<FlightSeatType, Double> seatTypePrices = new EnumMap<>(FlightSeatType.class);
 
     private Boolean isFull;

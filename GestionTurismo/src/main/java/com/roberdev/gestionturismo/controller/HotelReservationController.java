@@ -2,6 +2,8 @@ package com.roberdev.gestionturismo.controller;
 
 import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
 import com.roberdev.gestionturismo.service.IHotelReservationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +19,17 @@ public class HotelReservationController {
     IHotelReservationService hotelReservationService;
 
     @PostMapping("/hotel-booking/new")
-    public ResponseEntity<Double> createHotelReservation(@RequestBody CreateHotelReservationDTO createHotelReservationDTO) {
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotel reservation created"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error creating hotel reservation")
+    })
+    @Operation(summary = "Create a new hotel reservation")
+    public ResponseEntity<?> createHotelReservation(@RequestBody CreateHotelReservationDTO createHotelReservationDTO) {
 
         Double totalPrice = hotelReservationService.createHotelReservation(createHotelReservationDTO);
 
         if (totalPrice == null) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body("Error creating hotel reservation");
         }
         return ResponseEntity.ok(totalPrice);
 

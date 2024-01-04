@@ -53,8 +53,8 @@ public class FlightService implements IFlightService {
 
         FlightDTO flightDTO = flightConverter.convertCreateFlightDTOToFlightDTO(createFlightDTO);
         Flight flight = flightConverter.convertToEntity(flightDTO);
+
         flight.setFlightNumber(codFlightGenerator(flight.getOrigin(), flight.getDestination(), flight.getDate()));
-        System.out.println(flight.getFlightNumber());
         flight.setIsFull(false);
         flight.getStatusChangeDates().add(LocalDate.now());
         flightRepository.save(flight);
@@ -90,6 +90,14 @@ public class FlightService implements IFlightService {
             return null;
         }
 
+        updateFlightFromSwitch(updates, flight);
+
+        flightRepository.save(flight);
+
+        return flightConverter.convertToDTO(flight);
+    }
+
+    private static void updateFlightFromSwitch(Map<String, Object> updates, Flight flight) {
         updates.forEach((key, value) -> {
             switch (key) {
                 case "origin":
@@ -121,23 +129,33 @@ public class FlightService implements IFlightService {
                     break;
             }
         });
-        flightRepository.save(flight);
-
-        return flightConverter.convertToDTO(flight);
     }
 
     @Override
     public FlightDTO editFlightById(Long id, EditFlightDTO editFlightDTO) {
 
-        if (editFlightDTO.getDate().isBefore(LocalDate.now())) {
-
-            return null;
-        }
+        if (checkDateIsBeforeNow(editFlightDTO)) return null;
         Flight flight = flightRepository.findById(id).orElse(null);
         if (flight == null) {
 
             return null;
         }
+
+        updateFlightDetails(flight, editFlightDTO);
+        flightRepository.save(flight);
+
+        return flightConverter.convertToDTO(flight);
+    }
+
+    private static boolean checkDateIsBeforeNow(EditFlightDTO editFlightDTO) {
+        if (editFlightDTO.getDate().isBefore(LocalDate.now())) {
+
+            return true;
+        }
+        return false;
+    }
+
+    private void updateFlightDetails(Flight flight, EditFlightDTO editFlightDTO) {
         flight.setOrigin(editFlightDTO.getOrigin());
         flight.setDestination(editFlightDTO.getDestination());
         flight.setSeatTypePrices(editFlightDTO.getSeatTypePrices());
@@ -145,11 +163,8 @@ public class FlightService implements IFlightService {
         flight.setTotalSeats(editFlightDTO.getTotalSeats());
         flight.setIsActive(editFlightDTO.getIsActive());
         flight.setFlightNumber(codFlightGenerator(flight.getOrigin(), flight.getDestination(), flight.getDate()));
-        flightRepository.save(flight);
-        FlightDTO flightDTO = flightConverter.convertToDTO(flight);
-
-        return flightDTO;
     }
+
 
     @Override
     public FlightDTO getFlightById(Long id) {
@@ -164,92 +179,30 @@ public class FlightService implements IFlightService {
     public FlightDTO changeActiveStatus(String flightNumber, boolean isActive) {
         Flight flight = flightRepository.findByFlightNumber(flightNumber);
 
-        if (flight == null) {
-            return null;
-        }
-        if (isActive == flight.getIsActive() || !LocalDate.now().isAfter(flight.getStatusChangeDates().get(flight.getStatusChangeDates().size() - 1))) {
-            return null;
-        }
+        if (checkNullAndReservationsEmptyAndIsActive(isActive, flight)) return null;
 
         flight.setIsActive(isActive);
         flight.getStatusChangeDates().add(LocalDate.now());
         return flightConverter.convertToDTO(flightRepository.save(flight));
     }
 
-    /*
-        @Override
-        public Double createFlightReservation(CreateFlightReservationDTO createFlightReservationDTO) {
-            if (createFlightReservationDTO.getDateFlightTo().isAfter(Optional.ofNullable(createFlightReservationDTO.getDateFlightBack()).orElse(createFlightReservationDTO.getDateFlightTo()))) {
-                return null;
-            }
-
-            FlightReservation flightReservation = flightReservationConverter.convertCreateReservationDTOToFlightReservation(createFlightReservationDTO);
-            List<Person> passengers = createPassengers(createFlightReservationDTO);
-            flightReservation.setPassengers(passengers);
-
-            if (!processFlight(createFlightReservationDTO.getFlightToCode(), createFlightReservationDTO.getDateFlightTo(), createFlightReservationDTO.getSeatTypeFlightTo(), flightReservation, createFlightReservationDTO.getPassengers().size())) {
-                return null;
-            }
-
-            String flightBackCode = createFlightReservationDTO.getFlightBackCode();
-            if (!flightBackCode.isBlank() && !processFlight(flightBackCode, createFlightReservationDTO.getDateFlightBack(), createFlightReservationDTO.getSeatTypeFlightBack(), flightReservation, createFlightReservationDTO.getPassengers().size())) {
-                return null;
-            }
-
-            flightReservation.setPassengersNumber(flightReservation.getPassengers().size());
-
-            Flight flightTo = flightRepository.findByFlightNumberAndDate(createFlightReservationDTO.getFlightToCode(), createFlightReservationDTO.getDateFlightTo());
-
-            flightTo.getFlightReservations().add(flightReservation);
-
-
-            flightReservationRepository.save(flightReservation);
-            flightRepository.save(flightTo);
-            Flight flightBack = flightRepository.findByFlightNumberAndDate(createFlightReservationDTO.getFlightBackCode(), createFlightReservationDTO.getDateFlightBack());
-            if (flightBack != null) {
-                flightBack.getFlightReservations().add(flightReservation);
-                flightRepository.save(flightBack);
-            }
-            return flightReservation.getTotalPrice();
-        }
-
-        private List<Person> createPassengers(CreateFlightReservationDTO createFlightReservationDTO) {
-            List<Person> passengers = new ArrayList<>();
-
-            createFlightReservationDTO.getPassengers().forEach(person -> {
-                Person guest = new Person();
-                guest.setName(person.getName());
-                guest.setLastName(person.getLastName());
-                guest.setEmail(person.getEmail());
-                guest.setPhone(person.getPhone());
-                personRepository.save(guest);
-                passengers.add(guest);
-            });
-            return passengers;
-        }
-
-        private boolean processFlight(String flightCode, LocalDate flightDate, FlightSeatType seatType, FlightReservation flightReservation, int numberOfPassengers) {
-            Flight flight = flightRepository.findByFlightNumberAndDate(flightCode, flightDate);
-            if (flight == null || !flight.getIsActive() || flight.getIsFull() || flight.getTotalSeats() < numberOfPassengers) {
-                return false;
-            }
-
-            flight.setTotalSeats(flight.getTotalSeats() - numberOfPassengers);
-            if (flight.getTotalSeats() == 0) {
-                flight.setIsFull(true);
-            }
-
-            flightReservation.getFlights().add(flight);
-            flightReservation.setTotalPrice(calculateTotalPrice(flightReservation.getTotalPrice(), seatType, flight));
-
+    private static boolean checkNullAndReservationsEmptyAndIsActive(boolean isActive, Flight flight) {
+        if (flight == null) {
             return true;
         }
 
-        private Double calculateTotalPrice(Double currentTotal, FlightSeatType seatType, Flight flight) {
-            Double priceForSeatType = flight.getSeatTypePrices().getOrDefault(seatType, 0.0);
-            return Optional.ofNullable(currentTotal).orElse(0.0) + priceForSeatType;
+        if (!flight.getFlightReservations().isEmpty()) {
+            return true;
         }
-    */
+
+
+        if (isActive == flight.getIsActive() || !LocalDate.now().isAfter(flight.getStatusChangeDates().get(flight.getStatusChangeDates().size() - 1))) {
+            return true;
+        }
+        return false;
+    }
+
+
     private String codFlightGenerator(String origin, String destination, LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMM");
         String codDate = date.format(formatter);
@@ -265,7 +218,7 @@ public class FlightService implements IFlightService {
         return codFlight1 + codFlight2 + "-" + codDate + formatNum;
     }
 
-    private String extractCode(String location) {
+    private static String extractCode(String location) {
         String[] words = location.split(" ");
         if (words.length >= 2) {
             // Tomar las iniciales de las dos primeras palabras

@@ -1,7 +1,9 @@
 package com.roberdev.gestionturismo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.roberdev.gestionturismo.model.enums.FlightSeatType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,6 +15,7 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class FlightReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -27,6 +30,7 @@ public class FlightReservation {
 
     private Double totalPrice;
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             joinColumns = @JoinColumn(name = "flight_reservation_id"),

@@ -1,6 +1,7 @@
 package com.roberdev.gestionturismo.service;
 
 import com.roberdev.gestionturismo.converter.FlightReservationConverter;
+import com.roberdev.gestionturismo.converter.PersonConverter;
 import com.roberdev.gestionturismo.dto.CreateFlightReservationDTO;
 import com.roberdev.gestionturismo.model.Flight;
 import com.roberdev.gestionturismo.model.FlightReservation;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FlightReservationService implements IFlightReservationService {
@@ -28,19 +30,20 @@ public class FlightReservationService implements IFlightReservationService {
 
     @Autowired
     PersonRepository personRepository;
+    @Autowired
+    PersonConverter personConverter;
 
     @Autowired
     FlightReservationConverter flightReservationConverter;
 
     @Override
     public Double createFlightReservation(CreateFlightReservationDTO createFlightReservationDTO) {
-        if (createFlightReservationDTO.getDateFlightTo().isAfter(Optional.ofNullable(createFlightReservationDTO.getDateFlightBack()).orElse(createFlightReservationDTO.getDateFlightTo()))) {
-            return null;
-        }
+        if (checkIncorrectDatesAndReservationExist(createFlightReservationDTO)) return null;
 
         FlightReservation flightReservation = flightReservationConverter.convertCreateReservationDTOToFlightReservation(createFlightReservationDTO);
         List<Person> passengers = createPassengers(createFlightReservationDTO);
         flightReservation.setPassengers(passengers);
+
 
         if (!processFlight(createFlightReservationDTO.getFlightToCode(), createFlightReservationDTO.getDateFlightTo(), createFlightReservationDTO.getSeatTypeFlightTo(), flightReservation, createFlightReservationDTO.getPassengers().size())) {
             return null;
@@ -68,6 +71,49 @@ public class FlightReservationService implements IFlightReservationService {
         return flightReservation.getTotalPrice();
     }
 
+    private boolean checkIncorrectDatesAndReservationExist(CreateFlightReservationDTO createFlightReservationDTO) {
+        if (createFlightReservationDTO.getDateFlightTo().isAfter(Optional.ofNullable(createFlightReservationDTO.getDateFlightBack()).orElse(createFlightReservationDTO.getDateFlightTo()))) {
+            return true;
+        }
+
+        if (reservationExists(createFlightReservationDTO)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<FlightReservation> getReservations() {
+
+        List<FlightReservation> flightReservations = flightReservationRepository.findAll();
+
+        return flightReservations;
+    }
+
+    @Override
+    public String cancelReservation(Long id) {
+
+        flightReservationRepository.deleteById(id);
+
+        return "Reservation cancelled";
+    }
+
+    private boolean reservationExists(CreateFlightReservationDTO createFlightReservationDTO) {
+
+        List<FlightReservation> flightReservations = flightReservationRepository.findAll();
+        return flightReservations.stream()
+                .filter(reservation -> reservation.getFlightToCode().equals(createFlightReservationDTO.getFlightToCode()))
+                .anyMatch(reservation -> {
+                    List<Long> existingPassengerIds = reservation.getPassengers().stream()
+                            .map(Person::getId)
+                            .collect(Collectors.toList());
+
+                    return createFlightReservationDTO.getPassengers().stream()
+                            .map(personDTO -> personConverter.convertToEntity(personDTO).getId())
+                            .anyMatch(passengerId -> !existingPassengerIds.contains(passengerId));
+                });
+    }
+
 
     private List<Person> createPassengers(CreateFlightReservationDTO createFlightReservationDTO) {
         List<Person> passengers = new ArrayList<>();
@@ -85,10 +131,8 @@ public class FlightReservationService implements IFlightReservationService {
     }
 
     private boolean processFlight(String flightCode, LocalDate flightDate, FlightSeatType seatType, FlightReservation flightReservation, int numberOfPassengers) {
-        Flight flight = flightRepository.findByFlightNumberAndDate(flightCode, flightDate);
-        if (flight == null || !flight.getIsActive() || flight.getIsFull() || flight.getTotalSeats() < numberOfPassengers) {
-            return false;
-        }
+        Flight flight = checkNullFlightOrIsActiveOrIsFull(flightCode, flightDate, numberOfPassengers);
+        if (flight == null) return false;
 
         flight.setTotalSeats(flight.getTotalSeats() - numberOfPassengers);
         if (flight.getTotalSeats() == 0) {
@@ -99,6 +143,14 @@ public class FlightReservationService implements IFlightReservationService {
         flightReservation.setTotalPrice(calculateTotalPrice(flightReservation.getTotalPrice(), seatType, flight));
 
         return true;
+    }
+
+    private Flight checkNullFlightOrIsActiveOrIsFull(String flightCode, LocalDate flightDate, int numberOfPassengers) {
+        Flight flight = flightRepository.findByFlightNumberAndDate(flightCode, flightDate);
+        if (flight == null || !flight.getIsActive() || flight.getIsFull() || flight.getTotalSeats() < numberOfPassengers) {
+            return null;
+        }
+        return flight;
     }
 
     private Double calculateTotalPrice(Double currentTotal, FlightSeatType seatType, Flight flight) {
