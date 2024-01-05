@@ -45,12 +45,7 @@ public class FlightReservationService implements IFlightReservationService {
         flightReservation.setPassengers(passengers);
 
 
-        if (!processFlight(createFlightReservationDTO.getFlightToCode(), createFlightReservationDTO.getDateFlightTo(), createFlightReservationDTO.getSeatTypeFlightTo(), flightReservation, createFlightReservationDTO.getPassengers().size())) {
-            return null;
-        }
-
-        String flightBackCode = createFlightReservationDTO.getFlightBackCode();
-        if (!flightBackCode.isBlank() && !processFlight(flightBackCode, createFlightReservationDTO.getDateFlightBack(), createFlightReservationDTO.getSeatTypeFlightBack(), flightReservation, createFlightReservationDTO.getPassengers().size())) {
+        if (!createFlightReservationDTO.getFlightBackCode().isBlank() && !processFlight(createFlightReservationDTO, flightReservation)) {
             return null;
         }
 
@@ -82,22 +77,6 @@ public class FlightReservationService implements IFlightReservationService {
         return false;
     }
 
-    @Override
-    public List<FlightReservation> getReservations() {
-
-        List<FlightReservation> flightReservations = flightReservationRepository.findAll();
-
-        return flightReservations;
-    }
-
-    @Override
-    public String cancelReservation(Long id) {
-
-        flightReservationRepository.deleteById(id);
-
-        return "Reservation cancelled";
-    }
-
     private boolean reservationExists(CreateFlightReservationDTO createFlightReservationDTO) {
 
         List<FlightReservation> flightReservations = flightReservationRepository.findAll();
@@ -114,7 +93,6 @@ public class FlightReservationService implements IFlightReservationService {
                 });
     }
 
-
     private List<Person> createPassengers(CreateFlightReservationDTO createFlightReservationDTO) {
         List<Person> passengers = new ArrayList<>();
 
@@ -130,24 +108,25 @@ public class FlightReservationService implements IFlightReservationService {
         return passengers;
     }
 
-    private boolean processFlight(String flightCode, LocalDate flightDate, FlightSeatType seatType, FlightReservation flightReservation, int numberOfPassengers) {
-        Flight flight = checkNullFlightOrIsActiveOrIsFull(flightCode, flightDate, numberOfPassengers);
+    private boolean processFlight(CreateFlightReservationDTO createFlightReservationDTO, FlightReservation flightReservation) {
+        Flight flight = checkNullFlightOrIsActiveOrIsFull(createFlightReservationDTO);
+
         if (flight == null) return false;
 
-        flight.setTotalSeats(flight.getTotalSeats() - numberOfPassengers);
+        flight.setTotalSeats(flight.getTotalSeats() - createFlightReservationDTO.getPassengers().size());
         if (flight.getTotalSeats() == 0) {
             flight.setIsFull(true);
         }
 
         flightReservation.getFlights().add(flight);
-        flightReservation.setTotalPrice(calculateTotalPrice(flightReservation.getTotalPrice(), seatType, flight));
+        flightReservation.setTotalPrice(calculateTotalPrice(flightReservation.getTotalPrice(), createFlightReservationDTO.getSeatTypeFlightTo(), flight));
 
         return true;
     }
 
-    private Flight checkNullFlightOrIsActiveOrIsFull(String flightCode, LocalDate flightDate, int numberOfPassengers) {
-        Flight flight = flightRepository.findByFlightNumberAndDate(flightCode, flightDate);
-        if (flight == null || !flight.getIsActive() || flight.getIsFull() || flight.getTotalSeats() < numberOfPassengers) {
+    private Flight checkNullFlightOrIsActiveOrIsFull(CreateFlightReservationDTO createFlightReservationDTO) {
+        Flight flight = flightRepository.findByFlightNumberAndDate(createFlightReservationDTO.getFlightToCode(), createFlightReservationDTO.getDateFlightTo());
+        if (flight == null || !flight.getIsActive() || flight.getIsFull() || flight.getTotalSeats() < createFlightReservationDTO.getPassengers().size()) {
             return null;
         }
         return flight;
@@ -157,5 +136,22 @@ public class FlightReservationService implements IFlightReservationService {
         Double priceForSeatType = flight.getSeatTypePrices().getOrDefault(seatType, 0.0);
         return Optional.ofNullable(currentTotal).orElse(0.0) + priceForSeatType;
     }
+
+    @Override
+    public List<FlightReservation> getReservations() {
+
+        List<FlightReservation> flightReservations = flightReservationRepository.findAll();
+
+        return flightReservations;
+    }
+
+    @Override
+    public String cancelReservation(Long id) {
+
+        flightReservationRepository.deleteById(id);
+
+        return "Reservation cancelled";
+    }
+
 
 }
