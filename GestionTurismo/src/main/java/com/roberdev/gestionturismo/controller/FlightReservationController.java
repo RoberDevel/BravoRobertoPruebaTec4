@@ -28,7 +28,7 @@ public class FlightReservationController {
     @Operation(summary = "Create a new flight reservation")
     public ResponseEntity<?> createFlightReservation(@RequestBody CreateFlightReservationDTO createFlightReservationDTO) {
 
-        Double price = flightReservationService.createFlightReservation(createFlightReservationDTO);
+        String price = flightReservationService.createFlightReservation(createFlightReservationDTO);
 
 
         if (price == null) {
@@ -36,17 +36,6 @@ public class FlightReservationController {
         }
 
         return ResponseEntity.ok().body(price);
-    }
-
-    @GetMapping("/flight-booking/all")
-    @Operation(summary = "Get flight reservations")
-    public ResponseEntity<?> getReservations() {
-
-        List<FlightReservation> reservations = flightReservationService.getReservations();
-        if (reservations == null)
-            return ResponseEntity.badRequest().body("Error getting reservations");
-
-        return ResponseEntity.ok().body(reservations);
     }
 
     @DeleteMapping("/flight-booking/cancel/{id}")
@@ -58,6 +47,17 @@ public class FlightReservationController {
             return ResponseEntity.badRequest().body("Error cancelling reservation");
 
         return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/flight-booking/all")
+    @Operation(summary = "Get flight reservations")
+    public ResponseEntity<?> getReservations() {
+
+        List<FlightReservation> reservations = flightReservationService.getReservations();
+        if (reservations.isEmpty())
+            return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok().body(reservations);
     }
 
 

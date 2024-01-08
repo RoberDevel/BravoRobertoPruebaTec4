@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IFlightReservationService {
 
-    Double createFlightReservation(CreateFlightReservationDTO createFlightReservationDTO);
+    String createFlightReservation(CreateFlightReservationDTO createFlightReservationDTO);
 
     List<FlightReservation> getReservations();
 

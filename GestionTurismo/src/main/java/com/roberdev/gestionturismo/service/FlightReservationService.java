@@ -13,7 +13,6 @@ import com.roberdev.gestionturismo.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class FlightReservationService implements IFlightReservationService {
     FlightReservationConverter flightReservationConverter;
 
     @Override
-    public Double createFlightReservation(CreateFlightReservationDTO createFlightReservationDTO) {
+    public String createFlightReservation(CreateFlightReservationDTO createFlightReservationDTO) {
         if (checkIncorrectDatesAndReservationExist(createFlightReservationDTO)) return null;
 
         FlightReservation flightReservation = flightReservationConverter.convertCreateReservationDTOToFlightReservation(createFlightReservationDTO);
@@ -45,7 +44,7 @@ public class FlightReservationService implements IFlightReservationService {
         flightReservation.setPassengers(passengers);
 
 
-        if (!createFlightReservationDTO.getFlightBackCode().isBlank() && !processFlight(createFlightReservationDTO, flightReservation)) {
+        if (!createFlightReservationDTO.getFlightBackCode().isBlank() && !addFlightToReservationAndUpdatePrice(createFlightReservationDTO, flightReservation)) {
             return null;
         }
 
@@ -63,7 +62,7 @@ public class FlightReservationService implements IFlightReservationService {
             flightBack.getFlightReservations().add(flightReservation);
             flightRepository.save(flightBack);
         }
-        return flightReservation.getTotalPrice();
+        return flightReservation.getTotalPrice().toString();
     }
 
     private boolean checkIncorrectDatesAndReservationExist(CreateFlightReservationDTO createFlightReservationDTO) {
@@ -108,7 +107,7 @@ public class FlightReservationService implements IFlightReservationService {
         return passengers;
     }
 
-    private boolean processFlight(CreateFlightReservationDTO createFlightReservationDTO, FlightReservation flightReservation) {
+    private boolean addFlightToReservationAndUpdatePrice(CreateFlightReservationDTO createFlightReservationDTO, FlightReservation flightReservation) {
         Flight flight = checkNullFlightOrIsActiveOrIsFull(createFlightReservationDTO);
 
         if (flight == null) return false;

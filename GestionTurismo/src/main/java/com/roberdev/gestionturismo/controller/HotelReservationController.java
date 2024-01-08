@@ -1,15 +1,15 @@
 package com.roberdev.gestionturismo.controller;
 
 import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
+import com.roberdev.gestionturismo.model.HotelReservation;
 import com.roberdev.gestionturismo.service.IHotelReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/agency")
@@ -33,6 +33,28 @@ public class HotelReservationController {
         }
         return ResponseEntity.ok(totalPrice);
 
+    }
+
+
+    @DeleteMapping("/hotel-booking/cancel/{id}")
+    @Operation(summary = "Cancel hotel reservation")
+    public ResponseEntity<String> cancelReservation(@PathVariable Long id) {
+
+        String result = hotelReservationService.cancelReservation(id);
+        if (result.isBlank())
+            return ResponseEntity.badRequest().body("Error cancelling reservation");
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/hotel-booking/all")
+    @Operation(summary = "Get hotel reservations")
+    public ResponseEntity<?> getReservations() {
+        List<HotelReservation> reservations = hotelReservationService.getReservations();
+        if (reservations == null)
+            return ResponseEntity.badRequest().body("Error getting reservations");
+
+        return ResponseEntity.ok().body(reservations);
     }
 
 

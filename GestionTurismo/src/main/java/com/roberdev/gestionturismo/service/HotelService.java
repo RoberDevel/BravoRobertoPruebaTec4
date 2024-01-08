@@ -25,6 +25,10 @@ public class HotelService implements IHotelService {
     @Autowired
     private RoomRepository roomRepository;
 
+    public HotelService(HotelRepository hotelRepository) {
+        this.hotelRepository = hotelRepository;
+    }
+
     @Override
     public HotelDTO createHotel(CreateHotelDTO createHotelDTO) {
 
@@ -129,7 +133,7 @@ public class HotelService implements IHotelService {
 
     }
 
-    private String codHotelGenerator(String name) {
+    protected String codHotelGenerator(String name) {
         String[] words = name.split(" ");
         String codHotel;
 

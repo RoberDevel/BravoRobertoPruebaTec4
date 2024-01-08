@@ -27,7 +27,6 @@ public class SecurityConfig {
                                 .requestMatchers("/agency/rooms").permitAll()
                                 .requestMatchers("/agency/flight-booking/all").permitAll()
                                 .requestMatchers("/agency/flight-booking/cancel/{id}").permitAll()
-                                .requestMatchers("/agency/hotels/new").authenticated()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

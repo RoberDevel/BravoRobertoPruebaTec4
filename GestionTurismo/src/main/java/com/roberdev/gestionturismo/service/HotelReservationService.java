@@ -54,7 +54,21 @@ public class HotelReservationService implements IHotelReservationService {
         // Buscar habitación disponible, realizar reserva y obtener precio total
         Double totalPrice = checkAvailability(hotel, hotelReservation);
         if (totalPrice != null) return totalPrice;
-        return null; // No se encontró una habitación disponible
+        return null;
+    }
+
+    @Override
+    public String cancelReservation(Long id) {
+
+        hotelReservationRepository.deleteById(id);
+
+        return "Reservation cancelled";
+    }
+
+    @Override
+    public List<HotelReservation> getReservations() {
+
+        return hotelReservationRepository.findAll();
     }
 
 
