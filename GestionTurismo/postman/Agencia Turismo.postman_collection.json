@@ -244,7 +244,7 @@
 										}
 									]
 								},
-								"method": "POST",
+								"method": "PUT",
 								"header": [],
 								"url": {
 									"raw": "localhost:8080/agency/hotels/delete/ME-0000001?isActive=false",
@@ -630,11 +630,11 @@
 										}
 									]
 								},
-								"method": "POST",
+								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"origin\": \"Madrid\",\r\n    \"destination\": \"Paris\",\r\n    \"seatTypePrices\": {\r\n        \"TOURIST\": 120.00,\r\n        \"PREMIUM_TOURIST\": 200.00,\r\n        \"BUSINESS\": 350.00\r\n    },\r\n    \"date\": \"2024-08-15\",\r\n    \"totalSeats\": 150,\r\n    \"isActive\": true\r\n}",
+									"raw": "{\r\n    \"origin\": \"Oviedo\",\r\n    \"destination\": \"Paris\",\r\n    \"seatTypePrices\": {\r\n        \"TOURIST\": 120.00,\r\n        \"PREMIUM_TOURIST\": 200.00,\r\n        \"BUSINESS\": 350.00\r\n    },\r\n    \"date\": \"2024-08-15\",\r\n    \"totalSeats\": 150,\r\n    \"isActive\": true\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -675,7 +675,7 @@
 										}
 									]
 								},
-								"method": "POST",
+								"method": "PUT",
 								"header": [],
 								"url": {
 									"raw": "localhost:8080/agency/flights/delete/SEMA-2601000001?isActive=false",
