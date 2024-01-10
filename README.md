@@ -24,10 +24,19 @@ property name="javax.persistence.jdbc.password" value="tu contraseña"
 Para probar la aplicación puedes usar Postman.
 En la carpeta _GestionTurnos\ **postman**_ hay un archivo llamado __Agencia Turismo.postman_collection__.
 
+### Seguridad
+
+Para realizar el __login:__
+
+* __Usuario:__ hackaboss
+
+* __Contraseña:__ 123456
 </details>
 <br>
 <details>
 <summary><h2 style="display:inline">Funcionalidades 📚</h2></summary>
+
+
 
 ### Historias de Usuario
 
