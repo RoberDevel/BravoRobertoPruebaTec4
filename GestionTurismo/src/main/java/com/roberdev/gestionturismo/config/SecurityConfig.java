@@ -25,7 +25,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/agency/flights/{id}").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/agency/hotel-booking/new").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/agency/flight-booking/new").permitAll()
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
 
                 )
                 .formLogin(login -> login
