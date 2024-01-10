@@ -4,7 +4,6 @@ import com.roberdev.gestionturismo.dto.CreateHotelDTO;
 import com.roberdev.gestionturismo.dto.HotelDTO;
 import com.roberdev.gestionturismo.model.Hotel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component

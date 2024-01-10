@@ -8,7 +8,6 @@ import com.roberdev.gestionturismo.dto.PersonDTO;
 import com.roberdev.gestionturismo.model.Flight;
 import com.roberdev.gestionturismo.model.FlightReservation;
 import com.roberdev.gestionturismo.model.Person;
-import com.roberdev.gestionturismo.model.enums.FlightSeatType;
 import com.roberdev.gestionturismo.repository.FlightRepository;
 import com.roberdev.gestionturismo.repository.FlightReservationRepository;
 import com.roberdev.gestionturismo.repository.PersonRepository;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -93,7 +91,7 @@ public class FlightReservationService implements IFlightReservationService {
         for (Person person : passengers) {
             totalPrice += flightTo.getSeatTypePrices().get(createFlightReservationDTO.getSeatTypeFlightBack());
         }
-      
+
         flightReservation.setTotalPrice(totalPrice);
         Flight flightBack = flightRepository.findByFlightNumberAndDate(createFlightReservationDTO.getFlightBackCode(), createFlightReservationDTO.getDateFlightBack());
         flightBack.setTotalSeats(flightBack.getTotalSeats() - createFlightReservationDTO.getPassengers().size());

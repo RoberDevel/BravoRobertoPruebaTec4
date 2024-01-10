@@ -121,7 +121,6 @@ public class HotelReservationService implements IHotelReservationService {
         return hotelReservationDTOS;
     }
 
-    // Buscar habitación disponible
     private Room checkAvailability(Hotel hotel, HotelReservation hotelReservation) {
 
         List<Room> rooms = hotel.getRooms().stream()
@@ -187,15 +186,6 @@ public class HotelReservationService implements IHotelReservationService {
         }
         return guests;
 
-    }
-
-    private boolean reservationExists(HotelReservation hotelReservation) {
-
-        return hotelReservationRepository.existsByHotelCodeAndRoomTypeAndOverlapDates(
-                hotelReservation.getHotelCode(),
-                hotelReservation.getRoomType(),
-                hotelReservation.getCheckInDate(),
-                hotelReservation.getCheckOutDate());
     }
 
 }

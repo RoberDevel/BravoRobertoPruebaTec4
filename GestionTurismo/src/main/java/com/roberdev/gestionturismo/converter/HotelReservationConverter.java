@@ -55,8 +55,6 @@ public class HotelReservationConverter implements Converter<HotelReservation, Ho
         if (hotelReservationDTO.getGuests() != null) {
             hotelReservation.setGuests(hotelReservationDTO.getGuests().stream().map(personConverter::convertToEntity).toList());
         }
-        Hotel hotel = hotelRepository.findByHotelCode(hotelReservationDTO.getHotelCode());
-
 
         return hotelReservation;
     }

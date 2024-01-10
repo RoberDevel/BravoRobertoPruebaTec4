@@ -154,21 +154,19 @@ public class HotelService implements IHotelService {
         String codHotel;
 
         if (words.length >= 2) {
-            // Tomar las iniciales de las dos primeras palabras
+
             codHotel = (words[0].substring(0, 1) + words[1].substring(0, 1)).toUpperCase();
         } else if (words.length == 1) {
-            // Tomar las dos primeras letras de la única palabra
+
             codHotel = words[0].substring(0, 2).toUpperCase();
         } else {
-            // En caso de que no haya palabras, asignar un valor predeterminado
+
             codHotel = "NA";
         }
 
-        // Obtener el siguiente número autoincremental y formatearlo
         Long nextNum = hotelRepository.count() + 1;
         String formatNum = String.format("%07d", nextNum);
 
-        // Combinar las letras y el número
         return codHotel + "-" + formatNum;
     }
 

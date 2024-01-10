@@ -5,9 +5,6 @@ import com.roberdev.gestionturismo.converter.FlightReservationConverter;
 import com.roberdev.gestionturismo.converter.PersonConverter;
 import com.roberdev.gestionturismo.dto.*;
 import com.roberdev.gestionturismo.model.Flight;
-import com.roberdev.gestionturismo.model.FlightReservation;
-import com.roberdev.gestionturismo.model.HotelReservation;
-import com.roberdev.gestionturismo.model.Person;
 import com.roberdev.gestionturismo.model.enums.FlightSeatType;
 import com.roberdev.gestionturismo.repository.FlightRepository;
 import com.roberdev.gestionturismo.repository.FlightReservationRepository;
@@ -226,7 +223,7 @@ public class FlightService implements IFlightService {
 
             return words[0].substring(0, 2).toUpperCase();
         } else {
-            
+
             return "NA";
         }
     }

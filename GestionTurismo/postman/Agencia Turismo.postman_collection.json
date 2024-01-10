@@ -1,0 +1,610 @@
+{
+	"info": {
+		"_postman_id": "3211287b-7195-4e0f-a3ee-78e0b4dd67b2",
+		"name": "Agencia Turismo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24652492"
+	},
+	"item": [
+		{
+			"name": "Hotels",
+			"item": [
+				{
+					"name": "Hotel",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"Trip Maria Pita\",\r\n    \"city\": \"La Coruña\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/agency/hotels/new",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"hotels",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/hotels",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"hotels"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getByDateAndCity",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "?availableFrom=2024-03-01&availableTo=2024-06-01&city=Barcelona",
+									"query": [
+										{
+											"key": "availableFrom",
+											"value": "2024-03-01"
+										},
+										{
+											"key": "availableTo",
+											"value": "2024-06-01"
+										},
+										{
+											"key": "city",
+											"value": "Barcelona"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/hotels/2",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"hotels",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "editAnyAttribute",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"city\":\"Barcelona\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/agency/hotels/edit/TM-0000002",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"hotels",
+										"edit",
+										"TM-0000002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/hotels/edit/1?name=Hilton&city=La Coruña",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"hotels",
+										"edit",
+										"1"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Hilton"
+										},
+										{
+											"key": "city",
+											"value": "La Coruña"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "changeStatus",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/hotels/delete/ME-0000001?isActive=false",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"hotels",
+										"delete",
+										"ME-0000001"
+									],
+									"query": [
+										{
+											"key": "isActive",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Room",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"roomType\": \"TRIPLE\",\r\n  \"availableFrom\": \"2024-01-01\",\r\n  \"availableTo\": \"2024-12-31\",\r\n  \"pricePerNight\": 450.00\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/agency/rooms/new/TM-0000002",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"rooms",
+										"new",
+										"TM-0000002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/rooms",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"rooms"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reservation",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"hotelCode\": \"TM-0000002\",\r\n  \"checkInDate\": \"2024-07-01\",\r\n  \"checkOutDate\": \"2024-08-01\",\r\n  \"roomType\": \"DOUBLE\",\r\n  \"guests\": [\r\n    {\r\n      \"name\": \"John\",\r\n      \"lastName\": \"Doe\",\r\n      \"email\": \"john.doe@example.com\",\r\n      \"phone\": \"123-456-7890\",\r\n      \"dni\": \"12345698G\"\r\n    },\r\n    {\r\n      \"name\": \"Jane\",\r\n      \"lastName\": \"Doe\",\r\n      \"email\": \"jane.doe@example.com\",\r\n      \"phone\": \"098-765-4321\",\r\n      \"dni\": \"98563214K\"\r\n    }\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/agency/hotel-booking/new",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"hotel-booking",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/hotel-booking/cancel/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"hotel-booking",
+										"cancel",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/hotel-booking/all",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"hotel-booking",
+										"all"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Flights",
+			"item": [
+				{
+					"name": "Flight",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"origin\": \"Buenos Aires\",\r\n    \"destination\": \"Madrid\",\r\n    \"seatTypePrices\": {\r\n        \"TOURIST\": 200.00,\r\n        \"PREMIUM_TOURIST\": 350.00,\r\n        \"BUSINESS\": 500.00\r\n    },\r\n    \"date\": \"2024-01-26\",\r\n    \"totalSeats\": 10,\r\n    \"isActive\": true\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/agency/flights/new",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flights",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/flights",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flights"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getByDateAndOriginAndDestination",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/flights?date1=2024-01-01&date2=2024-12-31&origin=Madrid&destination=Buenos Aires",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flights"
+									],
+									"query": [
+										{
+											"key": "date1",
+											"value": "2024-01-01"
+										},
+										{
+											"key": "date2",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "origin",
+											"value": "Madrid"
+										},
+										{
+											"key": "destination",
+											"value": "Buenos Aires"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "editAnyAttribute",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"origin\": \"Barcelona\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/agency/flights/edit/SEMA-2601000001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flights",
+										"edit",
+										"SEMA-2601000001"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "editById",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"origin\": \"Madrid\",\r\n    \"destination\": \"Paris\",\r\n    \"seatTypePrices\": {\r\n        \"TOURIST\": 120.00,\r\n        \"PREMIUM_TOURIST\": 200.00,\r\n        \"BUSINESS\": 350.00\r\n    },\r\n    \"date\": \"2024-08-15\",\r\n    \"totalSeats\": 150,\r\n    \"isActive\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/agency/flights/edit/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flights",
+										"edit",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "changeStatus",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/flights/delete/SEMA-2601000001?isActive=false",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flights",
+										"delete",
+										"SEMA-2601000001"
+									],
+									"query": [
+										{
+											"key": "isActive",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/flights/2",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flights",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reservation",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"flightToCode\": \"MABA-2501000003\",\r\n    \"flightBackCode\": \"BAMA-2601000004\",\r\n    \"dateFlightTo\": \"2024-01-25\",\r\n    \"dateFlightBack\": \"2024-01-26\",\r\n    \"seatTypeFlightTo\": \"BUSINESS\",\r\n    \"seatTypeFlightBack\": \"TOURIST\",\r\n    \"passengers\": [\r\n        {\r\n            \"name\": \"Maria\",\r\n            \"lastName\": \"De Paula\",\r\n            \"email\": \"maria.depaula@example.com\",\r\n            \"phone\": \"324321563\",\r\n            \"dni\": \"26942378F\"\r\n        },   \r\n        {\r\n            \"name\": \"Luis\",\r\n            \"lastName\": \"Sanchez\",\r\n            \"email\": \"luis.sanchez@example.com\",\r\n            \"phone\": \"324321563\",\r\n            \"dni\": \"56342364T\"\r\n        } \r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/agency/flight-booking/new",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flight-booking",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/flight-booking/all",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flight-booking",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cancel",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/agency/flight-booking/cancel/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"agency",
+										"flight-booking",
+										"cancel",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
