@@ -7,8 +7,6 @@ import com.roberdev.gestionturismo.model.Room;
 import com.roberdev.gestionturismo.repository.HotelRepository;
 import com.roberdev.gestionturismo.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,6 +48,11 @@ public class RoomService implements IRoomService {
     public List<RoomDTO> getAllRooms() {
 
         List<Room> rooms = roomRepository.findAll();
+
+        if (rooms.isEmpty()) {
+            return null;
+        }
+
         List<RoomDTO> roomDTOS = rooms.stream().map(roomConverter::convertToDTO).collect(Collectors.toList());
 
 

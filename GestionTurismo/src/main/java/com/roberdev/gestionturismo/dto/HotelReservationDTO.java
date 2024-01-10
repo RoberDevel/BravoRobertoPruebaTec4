@@ -1,7 +1,5 @@
 package com.roberdev.gestionturismo.dto;
 
-import com.roberdev.gestionturismo.model.Person;
-import com.roberdev.gestionturismo.model.Room;
 import com.roberdev.gestionturismo.model.enums.RoomType;
 import lombok.AllArgsConstructor;
 import lombok.Data;

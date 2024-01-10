@@ -3,9 +3,9 @@ package com.roberdev.gestionturismo.controller;
 import com.roberdev.gestionturismo.dto.CreateFlightDTO;
 import com.roberdev.gestionturismo.dto.EditFlightDTO;
 import com.roberdev.gestionturismo.dto.FlightDTO;
-import com.roberdev.gestionturismo.model.Flight;
 import com.roberdev.gestionturismo.service.IFlightService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +42,9 @@ public class FlightController {
 
     @GetMapping("/flights")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Flights found"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No flights found")
+            @ApiResponse(responseCode = "200", description = "Flights found"),
+            @ApiResponse(responseCode = "204", description = "No flights found"),
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @Operation(summary = "Get flights")
     public ResponseEntity<?> getFlights(@RequestParam(required = false) LocalDate date1,
@@ -68,8 +69,9 @@ public class FlightController {
 
     @GetMapping("/flights/{id}")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Flight found"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No flight found")
+            @ApiResponse(responseCode = "200", description = "Flight found"),
+            @ApiResponse(responseCode = "204", description = "No flight found"),
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @Operation(summary = "Get flight by id")
     public ResponseEntity<?> getFlightById(@PathVariable Long id) {
@@ -86,8 +88,10 @@ public class FlightController {
 
     @PatchMapping("/flights/edit/{flightNumber}")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Flight updated"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error updating flight")
+            @ApiResponse(responseCode = "200", description = "Flight updated"),
+            @ApiResponse(responseCode = "400", description = "Error updating flight"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+
     })
     @Operation(summary = "Update flight by flight number")
     public ResponseEntity<?> updateFlightByFlightNumber(@PathVariable String flightNumber, @RequestBody Map<String, Object> updates) {
@@ -103,8 +107,9 @@ public class FlightController {
 
     @PostMapping("/flights/edit/{id}")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Flight edited"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error editing flight")
+            @ApiResponse(responseCode = "200", description = "Flight edited"),
+            @ApiResponse(responseCode = "400", description = "Error editing flight"),
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @Operation(summary = "Update flight by id")
     public ResponseEntity<?> editFlight(@PathVariable Long id, @RequestBody EditFlightDTO editFlightDTO) {
@@ -120,8 +125,9 @@ public class FlightController {
 
     @PostMapping("/flights/delete/{flightNumber}")
     @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Flight status changed"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error ocurred when changing flight status")
+            @ApiResponse(responseCode = "200", description = "Flight status changed"),
+            @ApiResponse(responseCode = "400", description = "Error ocurred when changing flight status"),
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @Operation(summary = "Change flight status")
     public ResponseEntity<?> changeActiveStatus(@PathVariable String flightNumber, @RequestParam Boolean isActive) {

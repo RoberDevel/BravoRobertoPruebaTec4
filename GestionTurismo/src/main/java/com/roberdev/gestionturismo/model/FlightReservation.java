@@ -1,8 +1,6 @@
 package com.roberdev.gestionturismo.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.roberdev.gestionturismo.model.enums.FlightSeatType;
 import jakarta.persistence.*;

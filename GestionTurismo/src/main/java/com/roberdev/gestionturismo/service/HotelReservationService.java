@@ -2,7 +2,6 @@ package com.roberdev.gestionturismo.service;
 
 import com.roberdev.gestionturismo.converter.HotelReservationConverter;
 import com.roberdev.gestionturismo.converter.PersonConverter;
-import com.roberdev.gestionturismo.dto.CreateFlightReservationDTO;
 import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
 import com.roberdev.gestionturismo.dto.HotelReservationDTO;
 import com.roberdev.gestionturismo.model.*;

@@ -2,7 +2,6 @@ package com.roberdev.gestionturismo.service;
 
 import com.roberdev.gestionturismo.dto.CreateHotelDTO;
 import com.roberdev.gestionturismo.dto.HotelDTO;
-import com.roberdev.gestionturismo.model.Hotel;
 
 import java.time.LocalDate;
 import java.util.List;

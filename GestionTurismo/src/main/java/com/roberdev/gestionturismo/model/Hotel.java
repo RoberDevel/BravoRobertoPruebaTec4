@@ -1,6 +1,5 @@
 package com.roberdev.gestionturismo.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 

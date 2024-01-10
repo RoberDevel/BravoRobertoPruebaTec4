@@ -1,10 +1,8 @@
 package com.roberdev.gestionturismo.service;
 
 import com.roberdev.gestionturismo.dto.CreateFlightDTO;
-import com.roberdev.gestionturismo.dto.CreateFlightReservationDTO;
 import com.roberdev.gestionturismo.dto.EditFlightDTO;
 import com.roberdev.gestionturismo.dto.FlightDTO;
-import com.roberdev.gestionturismo.model.enums.FlightSeatType;
 
 import java.time.LocalDate;
 import java.util.List;
