@@ -45,7 +45,7 @@ public class HotelController {
 
 
     //borrado lógico con posibilidad de reactivación
-    @PostMapping("/hotels/delete/{hotelCode}")
+    @PutMapping("/hotels/delete/{hotelCode}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Hotel deleted"),
             @ApiResponse(responseCode = "400", description = "Error occurred when changing hotel status"),

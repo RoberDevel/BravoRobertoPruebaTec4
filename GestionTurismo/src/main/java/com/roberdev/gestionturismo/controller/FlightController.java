@@ -105,7 +105,7 @@ public class FlightController {
         return ResponseEntity.ok().body(flightDTO);
     }
 
-    @PostMapping("/flights/edit/{id}")
+    @PutMapping("/flights/edit/{id}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Flight edited"),
             @ApiResponse(responseCode = "400", description = "Error editing flight"),
@@ -123,7 +123,7 @@ public class FlightController {
         return ResponseEntity.ok().body(flightDTO);
     }
 
-    @PostMapping("/flights/delete/{flightNumber}")
+    @PutMapping("/flights/delete/{flightNumber}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Flight status changed"),
             @ApiResponse(responseCode = "400", description = "Error ocurred when changing flight status"),
