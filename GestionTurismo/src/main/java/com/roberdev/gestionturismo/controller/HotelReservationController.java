@@ -2,9 +2,9 @@ package com.roberdev.gestionturismo.controller;
 
 import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
 import com.roberdev.gestionturismo.dto.HotelReservationDTO;
+import com.roberdev.gestionturismo.model.HotelReservation;
 import com.roberdev.gestionturismo.service.IHotelReservationService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,9 +39,8 @@ public class HotelReservationController {
 
     @DeleteMapping("/hotel-booking/cancel/{id}")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Hotel reservation cancelled"),
-            @ApiResponse(responseCode = "400", description = "Hotel reservation not found"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotel reservation cancelled"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Hotel reservation not found")
     })
     @Operation(summary = "Cancel hotel reservation")
     public ResponseEntity<String> cancelReservation(@PathVariable Long id) {
@@ -55,9 +54,8 @@ public class HotelReservationController {
 
     @GetMapping("/hotel-booking/all")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "reservations found"),
-            @ApiResponse(responseCode = "204", description = "No reservations found"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Get all hotel reservations"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No content")
     })
     @Operation(summary = "Get hotel reservations")
     public ResponseEntity<?> getReservations() {

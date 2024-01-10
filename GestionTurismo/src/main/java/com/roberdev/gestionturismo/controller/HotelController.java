@@ -2,9 +2,9 @@ package com.roberdev.gestionturismo.controller;
 
 import com.roberdev.gestionturismo.dto.CreateHotelDTO;
 import com.roberdev.gestionturismo.dto.HotelDTO;
+import com.roberdev.gestionturismo.model.Hotel;
 import com.roberdev.gestionturismo.service.IHotelService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,8 +27,7 @@ public class HotelController {
     @PostMapping("/hotels/new")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotel created"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error creating hotel"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error creating hotel")
     })
     @Operation(summary = "Create a new hotel")
     public ResponseEntity<?> createHotel(@RequestBody CreateHotelDTO hotel) {
@@ -47,9 +46,8 @@ public class HotelController {
     //borrado lógico con posibilidad de reactivación
     @PostMapping("/hotels/delete/{hotelCode}")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Hotel deleted"),
-            @ApiResponse(responseCode = "400", description = "Error occurred when changing hotel status"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotel deleted"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error occurred when changing hotel status")
     })
     @Operation(summary = "Delete a hotel", description = "Change the status hotel to active or not active by hotel code")
     public ResponseEntity<?> changeActiveStatus(@PathVariable String hotelCode, @RequestParam boolean isActive) {
@@ -64,9 +62,8 @@ public class HotelController {
 
     @GetMapping("/hotels")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Hotels found"),
-            @ApiResponse(responseCode = "204", description = "No hotels found"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotels found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No hotels found")
     })
     @Operation(summary = "Get hotels")
     public ResponseEntity<?> getHotels(
@@ -88,10 +85,6 @@ public class HotelController {
             if (hotelService.getAllHotels().isEmpty()) {
                 return ResponseEntity.noContent().build();
             }
-
-            List<HotelDTO> hotels = hotelService.getAllHotels();
-            if (hotels.isEmpty()) return ResponseEntity.noContent().build();
-
             return ResponseEntity.ok(hotelService.getAllHotels());
         }
     }
@@ -99,9 +92,8 @@ public class HotelController {
 
     @PutMapping("/hotels/edit/{id}")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Hotel updated"),
-            @ApiResponse(responseCode = "400", description = "Error updating hotel"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotel updated"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error updating hotel")
     })
     @Operation(summary = "Update hotel by id")
     public ResponseEntity<?> updateHotelById(@PathVariable Long id,
@@ -118,9 +110,8 @@ public class HotelController {
 
     @PatchMapping("/hotels/edit/{hotelCode}")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Hotel updated"),
-            @ApiResponse(responseCode = "400", description = "Error updating hotel"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotel updated"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error updating hotel")
     })
     @Operation(summary = "Update hotel by hotel code")
     public ResponseEntity<?> updateHotelByHotelCode(@PathVariable String hotelCode, @RequestBody Map<String, Object> updates) {
@@ -135,9 +126,8 @@ public class HotelController {
 
     @GetMapping("/hotels/{id}")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Hotel found"),
-            @ApiResponse(responseCode = "400", description = "No hotel found"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotel found"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "No hotel found")
     })
     @Operation(summary = "Get hotel by id")
     public ResponseEntity<HotelDTO> getHotel(@PathVariable Long id) {

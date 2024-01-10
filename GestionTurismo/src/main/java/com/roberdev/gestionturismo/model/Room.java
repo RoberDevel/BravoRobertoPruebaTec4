@@ -1,5 +1,8 @@
 package com.roberdev.gestionturismo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.roberdev.gestionturismo.model.enums.RoomType;
 import jakarta.persistence.*;
 import lombok.*;

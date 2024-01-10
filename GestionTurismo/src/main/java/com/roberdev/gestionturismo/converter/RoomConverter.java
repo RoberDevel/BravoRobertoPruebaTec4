@@ -1,8 +1,11 @@
 package com.roberdev.gestionturismo.converter;
 
+import com.roberdev.gestionturismo.dto.HotelReservationDTO;
 import com.roberdev.gestionturismo.dto.RoomDTO;
+import com.roberdev.gestionturismo.model.HotelReservation;
 import com.roberdev.gestionturismo.model.Room;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;

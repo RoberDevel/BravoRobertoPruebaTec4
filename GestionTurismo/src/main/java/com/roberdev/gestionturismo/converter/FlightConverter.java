@@ -3,6 +3,7 @@ package com.roberdev.gestionturismo.converter;
 import com.roberdev.gestionturismo.dto.CreateFlightDTO;
 import com.roberdev.gestionturismo.dto.EditFlightDTO;
 import com.roberdev.gestionturismo.dto.FlightDTO;
+import com.roberdev.gestionturismo.dto.FlightReservationDTO;
 import com.roberdev.gestionturismo.model.Flight;
 import com.roberdev.gestionturismo.model.enums.FlightSeatType;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package com.roberdev.gestionturismo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.roberdev.gestionturismo.model.enums.FlightSeatType;
 import jakarta.persistence.*;
 import lombok.*;

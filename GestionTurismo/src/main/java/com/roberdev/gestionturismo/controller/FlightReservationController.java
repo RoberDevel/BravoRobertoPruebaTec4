@@ -1,10 +1,12 @@
 package com.roberdev.gestionturismo.controller;
 
 import com.roberdev.gestionturismo.dto.CreateFlightReservationDTO;
+import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
 import com.roberdev.gestionturismo.dto.FlightReservationDTO;
+import com.roberdev.gestionturismo.model.FlightReservation;
 import com.roberdev.gestionturismo.service.IFlightReservationService;
+import com.roberdev.gestionturismo.service.IFlightService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +23,8 @@ public class FlightReservationController {
 
     @PostMapping("/flight-booking/new")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Flight reservation created"),
-            @ApiResponse(responseCode = "400", description = "Error creating flight reservation"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Flight reservation created"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error creating flight reservation")
     })
     @Operation(summary = "Create a new flight reservation")
     public ResponseEntity<?> createFlightReservation(@RequestBody CreateFlightReservationDTO createFlightReservationDTO) {
@@ -38,9 +39,8 @@ public class FlightReservationController {
 
     @DeleteMapping("/flight-booking/cancel/{id}")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Flight reservation cancelled"),
-            @ApiResponse(responseCode = "400", description = "Flight reservation not found"),
-            @ApiResponse(responseCode = "500", description = "Server error")
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Flight reservation cancelled"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Flight reservation not found")
     })
     @Operation(summary = "Cancel flight reservation")
     public ResponseEntity<String> cancelReservation(@PathVariable Long id) {
@@ -53,13 +53,9 @@ public class FlightReservationController {
     }
 
     @GetMapping("/flight-booking/all")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "reservations found"),
-            @ApiResponse(responseCode = "204", description = "No reservations found"),
-            @ApiResponse(responseCode = "500", description = "Server error")
-    })
     @Operation(summary = "Get flight reservations")
     public ResponseEntity<?> getReservations() {
+
         List<FlightReservationDTO> reservations = flightReservationService.getReservations();
         if (reservations.isEmpty())
             return ResponseEntity.noContent().build();

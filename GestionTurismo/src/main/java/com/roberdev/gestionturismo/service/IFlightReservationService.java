@@ -2,6 +2,7 @@ package com.roberdev.gestionturismo.service;
 
 import com.roberdev.gestionturismo.dto.CreateFlightReservationDTO;
 import com.roberdev.gestionturismo.dto.FlightReservationDTO;
+import com.roberdev.gestionturismo.model.FlightReservation;
 
 import java.util.List;
 
