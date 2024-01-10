@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class RoomConverter implements Converter<Room, RoomDTO> {
 
@@ -50,6 +54,16 @@ public class RoomConverter implements Converter<Room, RoomDTO> {
                 .map(hotelReservationConverter::convertToEntity).toList());
 
         return room;
+    }
+
+    public List<RoomDTO> convertToDTOList(List<Room> rooms) {
+        if (rooms == null) {
+            return Collections.emptyList();
+        }
+
+        return rooms.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
 

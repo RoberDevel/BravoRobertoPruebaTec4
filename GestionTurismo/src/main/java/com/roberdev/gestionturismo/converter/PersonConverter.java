@@ -19,7 +19,7 @@ public class PersonConverter implements Converter<Person, PersonDTO> {
         if (person == null) {
             return null;
         }
-        PersonDTO personDTO = new PersonDTO(person.getName(), person.getLastName(), person.getEmail(), person.getPhone());
+        PersonDTO personDTO = new PersonDTO(person.getName(), person.getLastName(), person.getEmail(), person.getPhone(), person.getDni());
         return personDTO;
     }
 
@@ -35,6 +35,7 @@ public class PersonConverter implements Converter<Person, PersonDTO> {
         person.setLastName(personDTO.getLastName());
         person.setEmail(personDTO.getEmail());
         person.setPhone(personDTO.getPhone());
+        person.setDni(personDTO.getDni());
 
         return person;
     }

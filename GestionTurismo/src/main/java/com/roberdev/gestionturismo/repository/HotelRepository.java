@@ -17,8 +17,8 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     Hotel findByHotelCode(String hotelCode);
 
-    @Query("SELECT DISTINCT h FROM Hotel h JOIN h.rooms hab WHERE hab.availableFrom <= :endDate AND hab.availableTo >= :startDate")
-    List<Hotel> findHotelsByAvailability(LocalDate startDate, LocalDate endDate);
+    @Query("SELECT DISTINCT h FROM Hotel h JOIN h.rooms hab WHERE h.city = :city AND hab.availableFrom <= :endDate AND hab.availableTo >= :startDate")
+    List<Hotel> findHotelsByAvailabilityAndCity(LocalDate startDate, LocalDate endDate, String city);
 
 
 }

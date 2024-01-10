@@ -14,7 +14,7 @@ public interface IHotelService {
 
     List<HotelDTO> getAllHotels();
 
-    List<HotelDTO> getHotelsByDate(LocalDate date, LocalDate date2);
+    List<HotelDTO> getHotelsByDateAndCity(LocalDate date, LocalDate date2, String city);
 
     HotelDTO editHotel(String hotelCode, Map<String, Object> updates);
 

@@ -28,7 +28,7 @@ public class HotelReservation {
     private RoomType roomType;
     private Double totalPrice;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "hotel_reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))

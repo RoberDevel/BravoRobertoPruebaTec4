@@ -31,7 +31,7 @@ public class FlightReservation {
     private Double totalPrice;
 
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             joinColumns = @JoinColumn(name = "flight_reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))

@@ -42,6 +42,7 @@ public class HotelController {
         return ResponseEntity.ok(hotelResult);
     }
 
+
     //borrado lógico con posibilidad de reactivación
     @PostMapping("/hotels/delete/{hotelCode}")
     @ApiResponses(value = {
@@ -67,15 +68,18 @@ public class HotelController {
     @Operation(summary = "Get hotels")
     public ResponseEntity<?> getHotels(
             @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate availableFrom,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate availableTo) {
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate availableTo,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") String city
 
-        if (availableFrom != null && availableTo != null) {
+    ) {
 
-            if (hotelService.getHotelsByDate(availableFrom, availableTo).isEmpty()) {
+        if (availableFrom != null && availableTo != null && city != null) {
+
+            if (hotelService.getHotelsByDateAndCity(availableFrom, availableTo, city).isEmpty()) {
                 return ResponseEntity.noContent().build();
             }
 
-            return ResponseEntity.ok(hotelService.getHotelsByDate(availableFrom, availableTo));
+            return ResponseEntity.ok(hotelService.getHotelsByDateAndCity(availableFrom, availableTo, city));
         } else {
 
             if (hotelService.getAllHotels().isEmpty()) {
@@ -86,7 +90,7 @@ public class HotelController {
     }
 
 
-    @PutMapping("hotels/edit/{id}")
+    @PutMapping("/hotels/edit/{id}")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotel updated"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error updating hotel")
@@ -104,7 +108,7 @@ public class HotelController {
         return ResponseEntity.ok(updatedHotel);
     }
 
-    @PatchMapping("hotels/edit/{hotelCode}")
+    @PatchMapping("/hotels/edit/{hotelCode}")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Hotel updated"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error updating hotel")

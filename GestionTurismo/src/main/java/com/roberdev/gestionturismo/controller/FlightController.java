@@ -33,7 +33,7 @@ public class FlightController {
         FlightDTO flightDTO = flightService.createFlight(createFlightDto);
 
         if (flightDTO == null) {
-            return ResponseEntity.badRequest().body("Error al crear el vuelo");
+            return ResponseEntity.badRequest().body("Error creating flight");
         }
 
         return ResponseEntity.ok().body(flightDTO);

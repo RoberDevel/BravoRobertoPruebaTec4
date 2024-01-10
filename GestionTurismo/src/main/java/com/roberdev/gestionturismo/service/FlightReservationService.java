@@ -3,6 +3,8 @@ package com.roberdev.gestionturismo.service;
 import com.roberdev.gestionturismo.converter.FlightReservationConverter;
 import com.roberdev.gestionturismo.converter.PersonConverter;
 import com.roberdev.gestionturismo.dto.CreateFlightReservationDTO;
+import com.roberdev.gestionturismo.dto.FlightReservationDTO;
+import com.roberdev.gestionturismo.dto.PersonDTO;
 import com.roberdev.gestionturismo.model.Flight;
 import com.roberdev.gestionturismo.model.FlightReservation;
 import com.roberdev.gestionturismo.model.Person;
@@ -13,9 +15,11 @@ import com.roberdev.gestionturismo.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,115 +41,159 @@ public class FlightReservationService implements IFlightReservationService {
 
     @Override
     public String createFlightReservation(CreateFlightReservationDTO createFlightReservationDTO) {
-        if (checkIncorrectDatesAndReservationExist(createFlightReservationDTO)) return null;
+        //se comprueba el vuelo de ida
+        if (!checkNullFlightOrIsActive(createFlightReservationDTO.getFlightToCode())) {
+            return "Error, flight " + createFlightReservationDTO.getFlightToCode() + " does not exist";
+        }
+        if (isFull(createFlightReservationDTO.getPassengers().size(), createFlightReservationDTO.getFlightToCode())) {
+            return "Error, only " + flightRepository.findByFlightNumber(createFlightReservationDTO.getFlightToCode()).getTotalSeats() + " seats available";
+        }
+
+        if (!checkDates(createFlightReservationDTO.getDateFlightTo(), createFlightReservationDTO.getFlightToCode())) {
+            return "Error, incorrect dates";
+        }
+        if (reservationExists(createFlightReservationDTO)) {
+            return "Error, reservation already exists";
+        }
+
+        Flight flightTo = flightRepository.findByFlightNumberAndDate(createFlightReservationDTO.getFlightToCode(), createFlightReservationDTO.getDateFlightTo());
 
         FlightReservation flightReservation = flightReservationConverter.convertCreateReservationDTOToFlightReservation(createFlightReservationDTO);
         List<Person> passengers = createPassengers(createFlightReservationDTO);
         flightReservation.setPassengers(passengers);
+        flightReservation.setFlightToCode(createFlightReservationDTO.getFlightToCode());
+        flightReservation.setDateFlightTo(createFlightReservationDTO.getDateFlightTo());
+        flightReservation.setSeatTypeFlightTo(createFlightReservationDTO.getSeatTypeFlightTo());
+        flightReservation.setPassengersNumber(passengers.size());
 
+        flightTo.setTotalSeats(flightTo.getTotalSeats() - createFlightReservationDTO.getPassengers().size());
 
-        if (!createFlightReservationDTO.getFlightBackCode().isBlank() && !addFlightToReservationAndUpdatePrice(createFlightReservationDTO, flightReservation)) {
-            return null;
-        }
-
-        flightReservation.setPassengersNumber(flightReservation.getPassengers().size());
-
-        Flight flightTo = flightRepository.findByFlightNumberAndDate(createFlightReservationDTO.getFlightToCode(), createFlightReservationDTO.getDateFlightTo());
-
-        flightTo.getFlightReservations().add(flightReservation);
-
-
-        flightReservationRepository.save(flightReservation);
         flightRepository.save(flightTo);
-        Flight flightBack = flightRepository.findByFlightNumberAndDate(createFlightReservationDTO.getFlightBackCode(), createFlightReservationDTO.getDateFlightBack());
-        if (flightBack != null) {
-            flightBack.getFlightReservations().add(flightReservation);
-            flightRepository.save(flightBack);
+
+        Double totalPrice = 0.0;
+        for (Person person : passengers) {
+            totalPrice += flightTo.getSeatTypePrices().get(createFlightReservationDTO.getSeatTypeFlightTo());
         }
-        return flightReservation.getTotalPrice().toString();
+
+        //Se comprueba el vuelo de vuelta
+        if (createFlightReservationDTO.getFlightBackCode().isBlank() || !checkNullFlightOrIsActive(createFlightReservationDTO.getFlightBackCode()) || isFull(createFlightReservationDTO.getPassengers().size(), createFlightReservationDTO.getFlightBackCode()) || !checkDates(createFlightReservationDTO.getDateFlightBack(), createFlightReservationDTO.getFlightBackCode())) {
+
+            flightReservation.setFlightBackCode("");
+            flightReservation.setDateFlightBack(null);
+            flightReservation.setSeatTypeFlightBack(null);
+            flightReservation.setTotalPrice(totalPrice);
+            flightReservationRepository.save(flightReservation);
+            return "Reservation created, total price: " + totalPrice;
+        }
+
+        flightReservation.setFlightBackCode(createFlightReservationDTO.getFlightBackCode());
+        flightReservation.setDateFlightBack(createFlightReservationDTO.getDateFlightBack());
+        flightReservation.setSeatTypeFlightBack(createFlightReservationDTO.getSeatTypeFlightBack());
+
+        for (Person person : passengers) {
+            totalPrice += flightTo.getSeatTypePrices().get(createFlightReservationDTO.getSeatTypeFlightBack());
+        }
+      
+        flightReservation.setTotalPrice(totalPrice);
+        Flight flightBack = flightRepository.findByFlightNumberAndDate(createFlightReservationDTO.getFlightBackCode(), createFlightReservationDTO.getDateFlightBack());
+        flightBack.setTotalSeats(flightBack.getTotalSeats() - createFlightReservationDTO.getPassengers().size());
+        flightRepository.save(flightBack);
+        flightReservationRepository.save(flightReservation);
+
+        return "Reservation created, total price: " + totalPrice;
+
     }
 
-    private boolean checkIncorrectDatesAndReservationExist(CreateFlightReservationDTO createFlightReservationDTO) {
-        if (createFlightReservationDTO.getDateFlightTo().isAfter(Optional.ofNullable(createFlightReservationDTO.getDateFlightBack()).orElse(createFlightReservationDTO.getDateFlightTo()))) {
-            return true;
-        }
 
-        if (reservationExists(createFlightReservationDTO)) {
-            return true;
+    private boolean checkDates(LocalDate date, String flightNumber) {
+
+        if (flightRepository.findByFlightNumberAndDate(flightNumber, date) == null) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     private boolean reservationExists(CreateFlightReservationDTO createFlightReservationDTO) {
 
         List<FlightReservation> flightReservations = flightReservationRepository.findAll();
+        Set<String> newReservationDnis = createFlightReservationDTO.getPassengers().stream()
+                .map(personDTO -> personConverter.convertToEntity(personDTO).getDni())
+                .collect(Collectors.toSet());
+
         return flightReservations.stream()
                 .filter(reservation -> reservation.getFlightToCode().equals(createFlightReservationDTO.getFlightToCode()))
-                .anyMatch(reservation -> {
-                    List<Long> existingPassengerIds = reservation.getPassengers().stream()
-                            .map(Person::getId)
-                            .collect(Collectors.toList());
-
-                    return createFlightReservationDTO.getPassengers().stream()
-                            .map(personDTO -> personConverter.convertToEntity(personDTO).getId())
-                            .anyMatch(passengerId -> !existingPassengerIds.contains(passengerId));
-                });
+                .flatMap(reservation -> reservation.getPassengers().stream())
+                .map(Person::getDni)
+                .anyMatch(newReservationDnis::contains);
     }
 
     private List<Person> createPassengers(CreateFlightReservationDTO createFlightReservationDTO) {
         List<Person> passengers = new ArrayList<>();
 
-        createFlightReservationDTO.getPassengers().forEach(person -> {
-            Person guest = new Person();
-            guest.setName(person.getName());
-            guest.setLastName(person.getLastName());
-            guest.setEmail(person.getEmail());
-            guest.setPhone(person.getPhone());
-            personRepository.save(guest);
-            passengers.add(guest);
-        });
+        for (PersonDTO personDTO : createFlightReservationDTO.getPassengers()) {
+            Person person = personRepository.findByNameAndLastNameAndDni(personDTO.getName(), personDTO.getLastName(), personDTO.getDni())
+                    .orElseGet(() -> {
+                        Person newPerson = new Person();
+                        newPerson.setName(personDTO.getName());
+                        newPerson.setLastName(personDTO.getLastName());
+                        newPerson.setEmail(personDTO.getEmail());
+                        newPerson.setPhone(personDTO.getPhone());
+                        newPerson.setDni(personDTO.getDni());
+                        return personRepository.save(newPerson);
+                    });
+            passengers.add(person);
+        }
         return passengers;
     }
 
-    private boolean addFlightToReservationAndUpdatePrice(CreateFlightReservationDTO createFlightReservationDTO, FlightReservation flightReservation) {
-        Flight flight = checkNullFlightOrIsActiveOrIsFull(createFlightReservationDTO);
-
-        if (flight == null) return false;
-
-        flight.setTotalSeats(flight.getTotalSeats() - createFlightReservationDTO.getPassengers().size());
-        if (flight.getTotalSeats() == 0) {
-            flight.setIsFull(true);
+    private Boolean checkNullFlightOrIsActive(String flightNumber) {
+        Flight flight = flightRepository.findByFlightNumber(flightNumber);
+        if (flight == null || !flight.getIsActive() || flight.getIsFull()
+        ) {
+            return false;
         }
-
-        flightReservation.getFlights().add(flight);
-        flightReservation.setTotalPrice(calculateTotalPrice(flightReservation.getTotalPrice(), createFlightReservationDTO.getSeatTypeFlightTo(), flight));
-
         return true;
     }
 
-    private Flight checkNullFlightOrIsActiveOrIsFull(CreateFlightReservationDTO createFlightReservationDTO) {
-        Flight flight = flightRepository.findByFlightNumberAndDate(createFlightReservationDTO.getFlightToCode(), createFlightReservationDTO.getDateFlightTo());
-        if (flight == null || !flight.getIsActive() || flight.getIsFull() || flight.getTotalSeats() < createFlightReservationDTO.getPassengers().size()) {
-            return null;
+    private Boolean isFull(Integer numberPassengers, String flightNumber) {
+        Flight flight = flightRepository.findByFlightNumber(flightNumber);
+        if (flight == null) {
+            return true;
         }
-        return flight;
-    }
 
-    private Double calculateTotalPrice(Double currentTotal, FlightSeatType seatType, Flight flight) {
-        Double priceForSeatType = flight.getSeatTypePrices().getOrDefault(seatType, 0.0);
-        return Optional.ofNullable(currentTotal).orElse(0.0) + priceForSeatType;
+        if (flight.getTotalSeats() < numberPassengers) {
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<FlightReservation> getReservations() {
+    public List<FlightReservationDTO> getReservations() {
 
-        List<FlightReservation> flightReservations = flightReservationRepository.findAll();
+        List<FlightReservationDTO> flightReservations = flightReservationConverter.convertToDTOList(flightReservationRepository.findAll());
 
         return flightReservations;
     }
 
     @Override
     public String cancelReservation(Long id) {
+
+        FlightReservation flightReservation = flightReservationRepository.findById(id).orElse(null);
+        if (flightReservation == null) {
+            return "Reservation not found";
+        }
+        String flightToCode = flightReservation.getFlightToCode();
+
+
+        Flight flight = flightRepository.findByFlightNumber(flightToCode);
+        flight.setTotalSeats(flight.getTotalSeats() + flightReservation.getPassengersNumber());
+        flightRepository.save(flight);
+        String flightBackCode = flightReservation.getFlightBackCode();
+        if (!flightBackCode.isBlank()) {
+            Flight flightBack = flightRepository.findByFlightNumber(flightBackCode);
+            flightBack.setTotalSeats(flightBack.getTotalSeats() + flightReservation.getPassengersNumber());
+            flightRepository.save(flightBack);
+        }
 
         flightReservationRepository.deleteById(id);
 

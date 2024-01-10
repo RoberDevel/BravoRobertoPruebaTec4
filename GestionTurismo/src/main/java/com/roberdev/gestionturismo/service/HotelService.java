@@ -1,6 +1,7 @@
 package com.roberdev.gestionturismo.service;
 
 import com.roberdev.gestionturismo.converter.HotelConverter;
+import com.roberdev.gestionturismo.converter.RoomConverter;
 import com.roberdev.gestionturismo.dto.CreateHotelDTO;
 import com.roberdev.gestionturismo.dto.HotelDTO;
 import com.roberdev.gestionturismo.model.Hotel;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class HotelService implements IHotelService {
@@ -21,6 +23,9 @@ public class HotelService implements IHotelService {
 
     @Autowired
     private HotelConverter hotelConverter;
+
+    @Autowired
+    RoomConverter roomConverter;
 
     @Autowired
     private RoomRepository roomRepository;
@@ -58,11 +63,18 @@ public class HotelService implements IHotelService {
     }
 
     @Override
-    public List<HotelDTO> getHotelsByDate(LocalDate date, LocalDate date2) {
+    public List<HotelDTO> getHotelsByDateAndCity(LocalDate date, LocalDate date2, String city) {
 
-        List<Hotel> hotels = hotelRepository.findHotelsByAvailability(date, date2);
+        List<Hotel> hotels = hotelRepository.findHotelsByAvailabilityAndCity(date, date2, city);
 
-        return hotels.stream().map(hotelConverter::convertToDTO).toList();
+        return hotels.stream().map(hotel -> {
+            HotelDTO hotelDTO = hotelConverter.convertToDTO(hotel);
+            List<Room> filteredRooms = hotel.getRooms().stream()
+                    .filter(room -> (date.isBefore(room.getAvailableTo()) && date.isAfter(room.getAvailableFrom())) || (date2.isBefore(room.getAvailableTo()) && date2.isAfter(room.getAvailableFrom())))
+                    .collect(Collectors.toList());
+            hotelDTO.setRooms(roomConverter.convertToDTOList(filteredRooms));
+            return hotelDTO;
+        }).collect(Collectors.toList());
 
     }
 
@@ -117,11 +129,15 @@ public class HotelService implements IHotelService {
         }
 
 
-        if (isActive != hotel.getIsActive() && LocalDate.now().isAfter(hotel.getStatusChangeDates().get(hotel.getStatusChangeDates().size() - 1))) {
+        if (isActive != hotel.getIsActive()
+            // || LocalDate.now().isAfter(hotel.getStatusChangeDates().get(hotel.getStatusChangeDates().size() - 1))
+        ) {
             hotel.setIsActive(isActive);
             hotel.getStatusChangeDates().add(LocalDate.now());
         }
-        return hotelConverter.convertToDTO(hotelRepository.save(hotel));
+        hotelRepository.save(hotel);
+
+        return hotelConverter.convertToDTO(hotel);
     }
 
 

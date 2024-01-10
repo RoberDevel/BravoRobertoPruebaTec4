@@ -24,6 +24,7 @@ public class Person {
     private String lastName;
     private String email;
     private String phone;
+    private String dni;
 
 
     @ManyToMany(mappedBy = "passengers", cascade = CascadeType.ALL)

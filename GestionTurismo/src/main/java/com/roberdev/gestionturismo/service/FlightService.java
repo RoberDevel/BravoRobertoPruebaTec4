@@ -66,7 +66,7 @@ public class FlightService implements IFlightService {
     @Override
     public List<FlightDTO> getAllFlights() {
 
-        List<FlightDTO> flightsDTO = flightRepository.findAll().stream().map(flightConverter::convertToDTO).toList();
+        List<FlightDTO> flightsDTO = flightRepository.findAll().stream().map(flightConverter::convertToDTO).sorted(Comparator.comparing(FlightDTO::getDate)).toList();
         return flightsDTO;
     }
 
@@ -77,7 +77,7 @@ public class FlightService implements IFlightService {
             return null;
         }
 
-        List<FlightDTO> flightsDTO = flightRepository.findByDateBetweenAndOriginAndDestination(date1, date2, origin, destination).stream().map(flightConverter::convertToDTO).toList();
+        List<FlightDTO> flightsDTO = flightRepository.findByDateBetweenAndOriginAndDestination(date1, date2, origin, destination).stream().map(flightConverter::convertToDTO).sorted(Comparator.comparing(FlightDTO::getDate)).toList();
 
         return flightsDTO;
     }
@@ -113,7 +113,6 @@ public class FlightService implements IFlightService {
                     flight.setIsActive((Boolean) value);
                     break;
                 case "seatTypePrices":
-                    // Asegúrate de que value es del tipo correcto antes de realizar el casting
                     if (value instanceof Map) {
                         Map<?, ?> rawMap = (Map<?, ?>) value;
                         Map<FlightSeatType, Double> seatTypePrices = new EnumMap<>(FlightSeatType.class);
@@ -196,7 +195,9 @@ public class FlightService implements IFlightService {
         }
 
 
-        if (isActive == flight.getIsActive() || !LocalDate.now().isAfter(flight.getStatusChangeDates().get(flight.getStatusChangeDates().size() - 1))) {
+        if (isActive == flight.getIsActive()
+            //|| !LocalDate.now().isAfter(flight.getStatusChangeDates().get(flight.getStatusChangeDates().size() - 1))
+        ) {
             return true;
         }
         return false;
@@ -210,24 +211,22 @@ public class FlightService implements IFlightService {
         String codFlight1 = extractCode(origin);
         String codFlight2 = extractCode(destination);
 
-        // Obtener el siguiente número autoincremental y formatearlo
         Long nextNum = flightRepository.count() + 1;
         String formatNum = String.format("%06d", nextNum);
 
-        // Combinar las letras y el número
         return codFlight1 + codFlight2 + "-" + codDate + formatNum;
     }
 
     private static String extractCode(String location) {
         String[] words = location.split(" ");
         if (words.length >= 2) {
-            // Tomar las iniciales de las dos primeras palabras
+
             return (words[0].substring(0, 1) + words[1].substring(0, 1)).toUpperCase();
         } else if (words.length == 1 && words[0].length() >= 2) {
-            // Tomar las dos primeras letras de la única palabra
+
             return words[0].substring(0, 2).toUpperCase();
         } else {
-            // En caso de que no haya palabras o la palabra sea muy corta, asignar un valor predeterminado
+            
             return "NA";
         }
     }

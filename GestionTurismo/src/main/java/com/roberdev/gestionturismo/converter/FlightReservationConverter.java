@@ -87,4 +87,18 @@ public class FlightReservationConverter implements Converter<FlightReservation, 
     }
 
 
+    public List<FlightReservationDTO> convertToDTOList(List<FlightReservation> reservations) {
+
+        if (reservations == null) {
+            return null;
+        }
+
+        List<FlightReservationDTO> flightReservationDTOS = new ArrayList<>();
+        for (FlightReservation flightReservation : reservations) {
+            flightReservationDTOS.add(convertToDTO(flightReservation));
+        }
+
+        return flightReservationDTOS;
+
+    }
 }

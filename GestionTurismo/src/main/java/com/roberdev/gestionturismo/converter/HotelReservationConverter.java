@@ -77,4 +77,16 @@ public class HotelReservationConverter implements Converter<HotelReservation, Ho
     }
 
 
+    public List<HotelReservationDTO> convertToDTOList(List<HotelReservation> reservations) {
+
+        if (reservations == null) {
+            return null;
+        }
+
+        List<HotelReservationDTO> hotelReservationDTOS = new ArrayList<>();
+        for (HotelReservation hotelReservation : reservations) {
+            hotelReservationDTOS.add(convertToDTO(hotelReservation));
+        }
+        return hotelReservationDTOS;
+    }
 }

@@ -2,6 +2,7 @@ package com.roberdev.gestionturismo.controller;
 
 import com.roberdev.gestionturismo.dto.CreateFlightReservationDTO;
 import com.roberdev.gestionturismo.dto.CreateHotelReservationDTO;
+import com.roberdev.gestionturismo.dto.FlightReservationDTO;
 import com.roberdev.gestionturismo.model.FlightReservation;
 import com.roberdev.gestionturismo.service.IFlightReservationService;
 import com.roberdev.gestionturismo.service.IFlightService;
@@ -28,23 +29,25 @@ public class FlightReservationController {
     @Operation(summary = "Create a new flight reservation")
     public ResponseEntity<?> createFlightReservation(@RequestBody CreateFlightReservationDTO createFlightReservationDTO) {
 
-        String price = flightReservationService.createFlightReservation(createFlightReservationDTO);
+        String result = flightReservationService.createFlightReservation(createFlightReservationDTO);
+        if (result.contains("Error"))
+            return ResponseEntity.badRequest().body(result);
 
 
-        if (price == null) {
-            return ResponseEntity.badRequest().body("Error creating flight reservation");
-        }
-
-        return ResponseEntity.ok().body(price);
+        return ResponseEntity.ok().body(result);
     }
 
     @DeleteMapping("/flight-booking/cancel/{id}")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Flight reservation cancelled"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Flight reservation not found")
+    })
     @Operation(summary = "Cancel flight reservation")
     public ResponseEntity<String> cancelReservation(@PathVariable Long id) {
 
         String result = flightReservationService.cancelReservation(id);
-        if (result.isBlank())
-            return ResponseEntity.badRequest().body("Error cancelling reservation");
+        if (result.contains("Error"))
+            return ResponseEntity.badRequest().body(result);
 
         return ResponseEntity.ok().body(result);
     }
@@ -53,9 +56,10 @@ public class FlightReservationController {
     @Operation(summary = "Get flight reservations")
     public ResponseEntity<?> getReservations() {
 
-        List<FlightReservation> reservations = flightReservationService.getReservations();
+        List<FlightReservationDTO> reservations = flightReservationService.getReservations();
         if (reservations.isEmpty())
             return ResponseEntity.noContent().build();
+
 
         return ResponseEntity.ok().body(reservations);
     }
