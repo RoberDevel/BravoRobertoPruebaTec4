@@ -96,37 +96,37 @@ __Path:__
 <br>
  Ejemplo de respuesta en caso de que las fechas no sean validas:
 
-  ![invalidDates](GestionTurismo\doc\hotelResInvDates.png)
+  ![invalidDates](doc\hotelResInvDates.png)
 
 2. Se comprueba que el hotel exista.
 <br>
  Ejemplo de respuesta en caso de que el hotel no exista:
 
-  ![invalidHotel](GestionTurismo\doc\hotelResInvHotel.png)
+  ![invalidHotel](doc\hotelResInvHotel.png)
 
 3. Se comprueba que el hotel esté dado de alta.
 <br>
  Ejemplo de respuesta en caso de que el hotel no esté dado de alta:
 
-  ![invalidHotel](GestionTurismo\doc\hotelResUnHotel.png)
+  ![invalidHotel](doc\hotelResUnHotel.png)
 
 4. Se comprueba que haya huespedes en la reserva.
 <br>
  Ejemplo de respuesta en caso de que no haya huespedes en la reserva:
 
-  ![invalidGuests](GestionTurismo\doc\hotelResInvGuests.png)
+  ![invalidGuests](doc\hotelResInvGuests.png)
 
 5. Se comprueba que la habitación esté disponible.
 <br>
  Ejemplo de respuesta en caso de que la habitación no esté disponible:
 
-  ![invalidRoom](GestionTurismo\doc\hotelResInvRoom.png)
+  ![invalidRoom](doc\hotelResInvRoom.png)
 
 6. Se comprueba que el numero de huespedes no supere la capacidad de la habitación.
 <br>
  Ejemplo de respuesta en caso de que el numero de huespedes supere la capacidad de la habitación:
 
-  ![invalidGuests](GestionTurismo\doc\hotelResInvGuestsRoom.png)
+  ![invalidGuests](doc\hotelResInvGuestsRoom.png)
 
 </details>
 
@@ -183,7 +183,7 @@ __3. Modificar un hotel:__ Los usuarios autenticados pueden modificar cualquier 
    <br>
    Ejemplo de respuesta en caso de que el hotel no exista:
 
-![invalidHotel](GestionTurismo\doc\hotelEditInvHotel.png)
+![invalidHotel](doc\hotelEditInvHotel.png)
 
 </details>
 
@@ -199,7 +199,7 @@ __4. Modificar un hotel:__ Los usuarios autenticados pueden modificar __"name"__
 <br>
  Ejemplo de respuesta en caso de que el hotel no exista:
 
-  ![invalidHotel](GestionTurismo\doc\hotelEditInvHotel.png)
+  ![invalidHotel](doc\hotelEditInvHotel.png)
 
 </details>
 
@@ -216,7 +216,7 @@ __5. Dar de baja un hotel:__ Los usuarios autenticados pueden dar de __baja__ o 
 <br>
  Ejemplo de respuesta en caso de que el hotel no exista:
 
-  ![invalidHotel](GestionTurismo\doc\hotelStatusInvHotel.png)
+  ![invalidHotel](doc\hotelStatusInvHotel.png)
 
 </details>
 
@@ -231,7 +231,7 @@ __6. Cancelar una reserva de hotel:__ Los usuarios autenticados pueden cancelar 
 <br>
  Ejemplo de respuesta en caso de que la reserva no exista:
 
-  ![invalidHotel](GestionTurismo\doc\hotelResCancelInvRes.png)
+  ![invalidHotel](doc\hotelResCancelInvRes.png)
 
 </details>
 
@@ -312,24 +312,24 @@ Los usuarios pueden realizar una reserva de vuelo de ida o de ida y vuelta.
 <br>
  Ejemplo de respuesta en caso de que el vuelo de ida no exista:
 
-  ![invalidFlight](GestionTurismo\doc\flightToResInvFlight.png)
+  ![invalidFlight](doc\flightToResInvFlight.png)
 
 2. Se comprueba que exista el vuelo en la fecha indicada.
 <br>
  Ejemplo de respuesta en caso de que el vuelo no exista en la fecha indicada:
 
-  ![invalidFlight](GestionTurismo\doc\flightToResInvDate.png)
+  ![invalidFlight](doc\flightToResInvDate.png)
 
 3. Se comprueba que haya suficientes asientos para la cantidad de pasajeros indicada en la reserva.
 <br>
  Ejemplo de respuesta en caso de que no haya suficientes asientos:
 
-  ![invalidFlight](GestionTurismo\doc\flightToResInsQSeats.png)
+  ![invalidFlight](doc\flightToResInsQSeats.png)
 4. Se comprueba si existe una reserva realizada por una de las personas que se quiere reservar.
 <br>
  Ejemplo de respuesta en caso de que exista una reserva realizada por una de las personas que se quiere reservar:
 
-  ![invalidFlight](GestionTurismo\doc\flightToResInsRes.png)
+  ![invalidFlight](doc\flightToResInsRes.png)
 
 </details>
 
@@ -363,7 +363,7 @@ __1. Crear un vuelo:__ Los usuarios autenticados pueden crear un vuelo.
 <br>
  Ejemplo de respuesta en caso de que la fecha introducida no sea anterior al dia de hoy, y que el vuelo no exista:
 
-  ![invalidFlight](GestionTurismo\doc\flightNewInv.png)
+  ![invalidFlight](doc\flightNewInv.png)
 
 </details>
 
@@ -387,7 +387,7 @@ __2. Modificar un vuelo:__ Los usuarios autenticados pueden modificar cualquier 
 <br>
  Ejemplo de respuesta en caso de que el vuelo no exista:
 
-  ![invalidFlight](GestionTurismo\doc\flightEditInvFlight.png)
+  ![invalidFlight](doc\flightEditInvFlight.png)
 
 </details>
 
@@ -419,7 +419,7 @@ __3. Modificar un vuelo:__ Los usuarios autenticados pueden modificar el origen,
    <br>
    Ejemplo de respuesta en caso de que el vuelo no exista:
 
-![invalidFlight](GestionTurismo\doc\flightEditInvFlight.png)
+![invalidFlight](doc\flightEditInvFlight.png)
 
 </details>
 
@@ -435,7 +435,7 @@ __4. Cancelar una reserva de vuelo:__ Los usuarios autenticados pueden cancelar 
 <br>
  Ejemplo de respuesta en caso de que la reserva no exista:
 
-  ![invalidFlight](GestionTurismo\doc\flightResCancelInvRes.png)
+  ![invalidFlight](doc\flightResCancelInvRes.png)
 
 </details>
 
